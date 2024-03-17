@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { TourAuthoringService } from '../tour-authoring.service';
 import { Point } from '../model/points.model';
-import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { Tour } from '../model/tour.model';
 import { OrderItem, OrderItemType } from '../../marketplace/model/order-item.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { TransportType } from '../model/requiredTime.model';
 
 @Component({
   selector: 'xp-points-view',
@@ -25,7 +23,7 @@ export class PointsViewComponent implements OnInit {
     name: '',
     description: '',
     difficult: 0,
-    tags: undefined,
+    tags: [],
     status: 0,
     price: 0,
     authorId: 0,
@@ -33,10 +31,7 @@ export class PointsViewComponent implements OnInit {
     publishTime: '',
     arhiveTime: '',
     points: [],
-    requiredTime: {
-      transportType: TransportType.Bicycle,
-      minutes: 0
-    },
+    requiredTimes: [],
     reviews: [],
     problems: [],
     myOwn: false
@@ -147,10 +142,4 @@ export class PointsViewComponent implements OnInit {
       );
       
     }
-    
-   
-    
-    
-
-      
   }

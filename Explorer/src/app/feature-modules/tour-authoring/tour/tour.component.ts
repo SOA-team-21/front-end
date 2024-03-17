@@ -4,7 +4,6 @@ import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { TourAuthoringService } from '../tour-authoring.service';
 import { Point } from '../model/points.model';
 import { TourReview } from '../model/tourReview.model';
-import { TransportType } from '../model/requiredTime.model';
 
 @Component({
   selector: 'xp-tour',
@@ -21,7 +20,7 @@ export class TourComponent implements OnInit {
     name: '',
     description: '',
     difficult: 0,
-    tags: undefined,
+    tags: [],
     status: 0,
     price: 0,
     authorId: 0,
@@ -29,10 +28,7 @@ export class TourComponent implements OnInit {
     publishTime: '',
     arhiveTime: '',
     points: [],
-    requiredTime: {
-      transportType: TransportType.Bicycle,
-      minutes: 0
-    },
+    requiredTimes: [],
     reviews: [],
     problems: [],
     myOwn: false
@@ -71,7 +67,29 @@ export class TourComponent implements OnInit {
     this.shouldEdit = true;
   }
 
+  closeModal() {
+    this.shouldRenderTourForm = false;
+  }
+
   onAddClicked(): void {
+    this.selectedTour = {
+      id: 0,
+      name: '',
+      description: '',
+      difficult: 0,
+      tags: [],
+      status: 0,
+      price: 0,
+      authorId: 0,
+      length: 0,
+      publishTime: '',
+      arhiveTime: '',
+      points: [],
+      requiredTimes: [],
+      reviews: [],
+      problems: [],
+      myOwn: false
+    };
     this.shouldEdit = false;
     this.shouldRenderTourForm = true;
   }
@@ -83,8 +101,6 @@ export class TourComponent implements OnInit {
       }
     })
   }
-
-  
 
   arhive(id: number){
     this.service.arhiveTour(id).subscribe({

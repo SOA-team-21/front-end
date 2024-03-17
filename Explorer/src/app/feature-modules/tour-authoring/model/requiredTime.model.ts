@@ -6,6 +6,5 @@ export interface RequiredTime {
 export enum TransportType {
     Walking,
     Bicycle,
-    Car,
-    Boat
+    Car
 }
