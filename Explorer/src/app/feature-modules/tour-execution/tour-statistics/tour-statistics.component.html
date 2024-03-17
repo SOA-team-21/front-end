@@ -1,0 +1,40 @@
+<div id="tours-details" class="div-tour-details d-flex align-items-center justify-content-center">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Difficult</th>
+                    <th>Price</th> 
+                    <th>Tours statistics</th>  
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tour of tours">
+                    <td>{{tour.name}}</td>
+                    <td>{{tour.description}}</td>
+                    <td>{{tour.difficult}}</td>
+                    <td>{{tour.price}}</td>  
+                    <td>
+                        <button class="white-button" (click)="handleTourDetails(tour.id)">View Stats</button>
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="selectedTourStats">
+            <h3>Selected Tour Stats</h3>
+            <p>Number of completions: {{ selectedTourStats.completedCount }}</p>
+            <p>Number of activations: {{ selectedTourStats.activeCount }}</p>
+            <p>Number of purchases: {{ selectedTourStats.purchaseCount }}</p>
+        </div>
+    </div>
+</div>
+<div>
+    <h3>Your tours statistics</h3>
+    <p>Number of completed tours: {{ completedTourCount }}</p>
+    <p>Number of activated tours: {{ activeTourCount }}</p>
+    <p>Number of purchased tours: {{ purchasedTourCount }}</p>
+</div>

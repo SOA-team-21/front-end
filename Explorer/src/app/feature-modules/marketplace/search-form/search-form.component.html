@@ -1,0 +1,50 @@
+<div class="search-container-container">
+    <div class="search-container">
+        <form [formGroup]="searchForm" class="container">
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Longitude:</span>
+                </div>
+                <input type="text" class="form-control me-2" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                    formControlName="longitude">
+
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Latitude:</span>
+                </div>
+                <input type="text" class="form-control me-2" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                    formControlName="latitude">
+
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Distance(km):</span>
+                </div>
+                <input type="text" class="form-control me-2" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+                    formControlName="distance">
+
+                <!-- <div>
+                    <button class="btn btn-secondary me-2" type="button" (click)="collapse.toggle()"
+                        id="inputGroup-sizing-sm" [attr.aria-expanded]="!isCollapsed"
+                        aria-controls="collapseExample" aria-label="Small">Map</button>
+                </div> -->
+                <div>
+                    <button type="submit" (click)="searchClick()" class="btn btn-primary"
+                        id="inputGroup-sizing-sm" aria-label="Small">Search</button>
+                </div>
+            </div>
+            <div class="wrapper" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+                <div class="map-container" style="width: 60;">
+                    <div>
+                        <xp-map class="map" (longitude)="setLongitude($event)"
+                            (latitude)="setLatitude($event)"></xp-map>
+                    </div>
+                    <div class="distance-container">
+                        <label class="distance-label">Distance</label>
+                        <input type="range" class="form-range distance-range" min="0" max="100"
+                            formControlName="distance" (input)="setDistance($event)">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

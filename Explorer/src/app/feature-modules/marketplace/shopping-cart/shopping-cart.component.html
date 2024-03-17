@@ -1,0 +1,43 @@
+<div>
+    <div>
+        <div class="divide">
+        </div>
+        <div class="header-div">
+
+            My cart
+
+        </div>
+        <div class="AC-div">Wallet balance: {{wallet?.coins}} AC</div>
+        <div>
+            <div class="cart">
+                <div *ngFor="let t of shoppingCart?.items" class="cart-container">
+
+                    <div><img [src]="t.image" class="image"></div>
+                    <div class="up">
+                        <div class="info-container">
+                            <span class="info">Name: {{t.name}}</span>
+                            <br>
+                            <span class="info">Price: {{t.price}} AC</span>
+                            <br>
+                            <span class="info">Type: {{t.type}}</span><br>
+                            <span class="font-weight-light" *ngFor="let item of t.toursInfo">{{item.name}}</span>                      
+                        </div>
+                    </div>
+                    <div><button mat-raised-button class="custom-button" [style.background-color]="'#00BBFF'"
+                            [style.color]="'#F7FFF7'" (click)="onRemoveClicked(t)">Remove
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="header-div">
+            <span>Total price: {{sum}} AC</span>
+        </div>
+        <div class="header-div">
+            <button mat-raised-button class="buy-button" [style.background-color]="'#00BBFF'" [style.color]="'#F7FFF7'"
+                (click)="purchaseFromCartUsingAC()">Purchase
+            </button>
+        </div>
+    </div>
+</div>

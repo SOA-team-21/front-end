@@ -1,0 +1,7 @@
+.thumb-up-active {
+  color: green; /* Boja za thumb_up kada je ocenjeno */
+}
+
+.thumb-down-active {
+  color: red; /* Boja za thumb_down kada je ocenjeno */
+}

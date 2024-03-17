@@ -1,0 +1,42 @@
+<!-- problems.component.html -->
+
+<div id="problems">
+    <div>
+        <p>All tour problems</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Description</th>
+                <th>Time</th>
+                <th>Deadline</th>
+                <th>ISsolved</th>
+                <th>Actions</th> <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let problem of problems" [ngClass]="{'overdue': isOverdue(problem.time)}">
+                
+              
+                <td>{{problem.category}}</td>
+                <td>{{problem.priority ? 'High' : 'Low'}}</td>
+                <td>{{problem.description}}</td>
+                <td>{{problem.time | date:'short'}}</td>
+                <td>{{problem.deadline | date:'short'}}</td>          
+                <td>{{problem.isSolved ? 'True' : 'False'}}</td>
+                <td>
+                    <button *ngIf="problem.isSolved && passedDeadline(problem.deadline)" (click)="deleteProblem(problem.id || 0)">Delete Problem</button>
+                    <button *ngIf="!problem.isSolved && passedDeadline(problem.deadline)" (click)="deleteProblem(problem.tourId)">Delete Tour</button>
+                    <form [formGroup]="newDeadlineForm">
+                        <input type="datetime-local" formControlName="newDeadlineValue" />
+                        <button type="button" (click)="setDeadlineForProblem(problem.id ||0)">Set Deadline</button>
+                      </form>
+                </td>
+                
+                   
+           </tr>
+        </tbody>
+    </table>
+</div>

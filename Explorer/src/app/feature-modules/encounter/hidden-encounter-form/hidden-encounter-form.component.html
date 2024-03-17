@@ -1,0 +1,54 @@
+<h1>Create hidden encounter:</h1>
+<form [formGroup]="encounterForm">
+    <div>
+        <div class="form-item">
+            <label>Name:</label>
+            <input matInput formControlName="name" type="text">
+        </div>
+        <div class="form-item">
+            <label>Description:</label>
+            <textarea 
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="3"
+            formControlName="description"
+            cdkAutosizeMaxRows="6"></textarea>
+        </div>
+        <div class="form-item">
+            <label>Location:</label>
+            <div class="form-subitem">
+              <div>
+                <label>Latitude:</label>
+                <input matInput formControlName="latitude" type="number">
+              </div>
+              <div>
+                <label>Longitude:</label>
+                <input matInput formControlName="longitude" type="number">
+              </div>
+            </div>
+          </div>
+        <div class="form-item">
+            <label>Experience:</label>
+            <input matInput formControlName="experience" type="number">
+        </div>
+        <div class="form-item">
+            <label>Radius:</label>
+            <input matInput formControlName="radius" type="number">
+        </div>
+        <div class="image-flex-box form-item">
+            <div class="form-item">
+                <label>Add image</label>
+                <input type="file" multiple (change)="onFileSelected($event)">
+            </div>
+        </div>
+
+        <span class="form-text">Choose Point of image:</span>
+                <button class="btn btn-outline-secondary dropdown-toggle buttonSelect" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">{{selectedPoint?.name ?? "select"}}</button>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let point of points"><a class="dropdown-item" (click)="setSelectedPoint(point)">{{point.name}}</a></li>
+                </ul>
+        <div>
+            <button (click)="addEncounter()">Create encounter</button>
+        </div>
+    </div>
+</form>

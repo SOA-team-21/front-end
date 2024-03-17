@@ -1,0 +1,41 @@
+<div class="container mt-4">
+    <div class="row">
+        <h2 class="text-center">Izmeni profil</h2>
+    </div>
+    <div class="row justify-content-center form-control-lg">
+        <div class="col-12 border form-border p-4">
+            <form [formGroup]="profileForm">
+                <div class="mb-3">
+                    <img src="{{profile.picture}}" class="img-responsive img-thumbnail" style="width:160px;height:140px">
+                </div>
+                <div class="mx-5 mb-5">
+                    <input type="file" (change)="onSelectedFile($event)">
+                </div>
+                <div class="mb-5">
+                    <button class="btn btn-light" *ngIf="profile.picture != ''" (click)="removeImage()">Remove image</button>
+                </div>
+                <div class="row mb-3">
+                    <label class="form-label">Name</label>
+                </div>
+                <div class="row mb-3">
+                    <input type="text" formControlName="name" class="form-control">
+                </div>
+                <div class="row mb-3">
+                    <label class="form-label">Surname</label>
+                    <input type="text" formControlName="surname" class="form-control">
+                </div>
+                <div class="row mb-3">
+                    <label class="form-label">Bio</label>
+                    <textarea formControlName="bio" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="row mb-3">
+                    <label class="form-label">Quote</label>
+                    <textarea formControlName="quote" class="form-control"></textarea>
+                </div>
+                <div class="row">
+                    <button data-bs-dismiss="modal" type="submit" class="btn btn-primary" (click)="saveProfile()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

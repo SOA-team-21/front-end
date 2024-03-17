@@ -1,0 +1,55 @@
+<div id="aproblems">
+    <div>
+        <p>Problems</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category</th>
+                <th>Is it solved</th>
+                <th>Solution</th>
+                <th>MyComment</th>
+                <th>Time</th>
+                <th>Respond</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let problem of problems">
+                <td>{{problem.category}}</td>
+                <td>{{problem.isSolved ? 'Yes' : 'No'}}</td>
+                <td>{{problem.authorsSolution}}</td>
+                <td>{{problem.unsolvedProblemComment}}</td>
+                <td>{{problem.time | date:'short'}}</td>
+                <td class="button-ap">
+                    <button color="primary" (click)="onSolvedClicked(problem)" mat-icon-button>
+                      Mark solved
+                    </button>
+                </td>
+                <td class="button-ap">
+                    <button color="primary" (click)="onUnsolvedClicked(problem)" mat-icon-button>
+                      Mark unsolved
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="shouldRenderUnsolvedForm">
+        <div class="respond-header">
+          <p>Respond to Problem</p>
+        </div>
+        <form [formGroup]="notSolvedForm" (ngSubmit)="onIsNotSolved()">
+            <div>
+              <mat-form-field>
+                <mat-label>UnresolvedComment</mat-label>
+                <input matInput formControlName="comment" type="text" />
+              </mat-form-field>
+            </div>
+            <div class="form-submit">
+                <button type="submit" color="primary" mat-button>
+                  Submit Response
+                </button>
+              </div>
+          </form>
+      </div>
+</div>

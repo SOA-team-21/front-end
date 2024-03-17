@@ -1,0 +1,208 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+
+        <a class="navbar-brand ms-2" [routerLink]="['/home']">
+            <img src="assets/3p-app-icon-292f36/icon-192x192.png" alt="3p app" width="50" height="50">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <!-- Explore Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Explore
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Top destinations</a></li>
+                        <li><a class="dropdown-item" href="#">Popular restaurants</a></li>
+                    </ul>
+                </li>
+
+                <!-- Trips Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Tours
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+                        <li><a class="dropdown-item" [routerLink]="['problem-form']">All tours</a></li>
+                        <li *ngIf="user && user.role === 'tourist'">
+                            <a class="dropdown-item" [routerLink]="['points-view']">Create own tour</a>
+                            <a class="dropdown-item" [routerLink]="['tour-own-view']">My own tours</a>
+                            <a class="dropdown-item" [routerLink]="['tour-campaigns']">Your campaigns</a>
+                            <a class="dropdown-item" [routerLink]="['tour-campaign-form']">Create a campaign</a>
+                            <a class="dropdown-item" [routerLink]="['all-bundles']">All bundles</a>
+                        </li>
+                        <li *ngIf="user && user.role === 'author'">
+                            <a class="dropdown-item" [routerLink]="['tour-statistics']">Your tour statistics</a> 
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Community Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Community
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
+                        <li><a class="dropdown-item" [routerLink]="['blog-creation']">Create a blog</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['all-blogs']">View travel blogs</a></li>
+                        <li *ngIf="user && user.username !== ''"><a class="dropdown-item"
+                                [routerLink]="['find-people']">Find people</a></li>
+                    </ul>
+                </li>
+
+                <!-- User Section -->
+                <li class="nav-item dropdown dropdown-center" *ngIf="user && user.username !== ''">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink4" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        
+                        User (<span *ngIf="user.role === 'administrator'">Admin</span><span *ngIf="user.role === 'author'">Author</span><span *ngIf="user.role === 'tourist'">Tourist</span>)
+
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink4">
+
+                        <li *ngIf="user && user.role === 'administrator'">
+                            <a class="dropdown-item" [routerLink]="['equipment']">Manage equipment</a>
+                            <a class="dropdown-item" [routerLink]="['overview']">Overview of users</a>
+                            <a class="dropdown-item" [routerLink]="['app-ratings']">All App Ratings</a>
+                            <a class="dropdown-item" [routerLink]="['problems']">Show Tour Problems</a>
+                            <a class="dropdown-item" [routerLink]="['public-registration-requests']">Manage registration requests</a>
+                            <a class="dropdown-item" [routerLink]="['blog-reports']">Manage reported comments</a>
+                        </li>
+
+                        <li *ngIf="user && (user.role === 'author' || user.role === 'tourist')">
+                            <a class="dropdown-item" [routerLink]="['app-rating-form']">Rate the App</a>
+                        </li>
+
+                        <li *ngIf="user && (user.role === 'author' || user.role === 'administrator')">
+                            <a class="dropdown-item" [routerLink]="['encounter-creation']">Create encounter</a>
+                        </li>
+
+                        <li *ngIf="user && user.role === 'author'">
+                            <a class="dropdown-item" [routerLink]="['points']">Manage points</a>
+                            <a class="dropdown-item" [routerLink]="['objects']">Manage objects</a>
+                            <a class="dropdown-item" [routerLink]="['tours']">Manage tours</a>
+                            <a class="dropdown-item" [routerLink]="['blog-comments']">Blog</a>
+                            <a class="dropdown-item" [routerLink]="['authors-problems']">Respond to problems</a>
+                            <a class="dropdown-item" [routerLink]="['coupons']">Coupons</a>
+                            <a class="dropdown-item" [routerLink]="['activate-sale']">Activate sale</a>
+                            <a class="dropdown-item" [routerLink]="['all-bundles']">Manage bundles</a>
+                            <a class="dropdown-item" [routerLink]="['app-calendar']">Calendar</a>
+
+                        </li>
+
+                        <li *ngIf="user && user.role === 'tourist'">
+                            <a class="dropdown-item" [routerLink]="['equipment-record']">Equipment record</a>
+                            <a class="dropdown-item" [routerLink]="['club']">Club management</a>
+                            <a class="dropdown-item" [routerLink]="['invitations']">Club invitations</a>
+                            <a class="dropdown-item" [routerLink]="['problem-form']">All tours</a>
+                            <a class="dropdown-item" [routerLink]="['membership-requests']">All Requests</a>
+                            <a class="dropdown-item" [routerLink]="['shopping-cart']">My cart</a>
+                            <a class="dropdown-item" [routerLink]="['purchased-tours']">Purchased tours</a>
+                            <a class="dropdown-item" [routerLink]="['tourists-problems']">Responds to problems</a>
+                            <a class="dropdown-item" [routerLink]="['tours-on-sale']">Tours on sale</a>
+                            
+
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <!--Messages dropdown menu-->
+                <div class="container">
+                    <div class="dropdown">
+                    <li *ngIf="user && user.role !== 'administrator' && user.username !== ''">
+                        <button class="btn btn-secondary dropdown-toggle" color="btn-primary" [routerLink]="['profile']"><i class="bi bi-person"></i></button>
+                    </li>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" color="btn-primary" type="button" id="messageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-chat"></i> 
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="messageDropdown" style="width: 200px;">
+                            <button type="button" class="plain-button" data-bs-toggle="modal" data-bs-target="#sendMessageModal">Send message to followers</button>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--Notifications dropdown menu-->
+                <div class="container">
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" color="btn-primary" type="button" id="notificationDropdown" (click)="getNotifications()" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false">
+                        <i class="bi bi-bell"></i> 
+                        <span *ngIf="unreadNotificationCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ unreadNotificationCount }}
+                            <span class="visually-hidden">unread messages</span>
+                          </span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" style="width: 400px;">
+                        <div *ngFor="let notification of this.user.notifications" class="container mt-2">
+                            <div class="card" [style.background-color]="notification.status === 0 ? 'lightgray' : ''">
+                              <div class="card-body d-flex justify-content-between align-items-start">
+                                <div class="notification-container">
+                                  <p class="card-title">{{notification.message}}</p>
+                                  <small>{{notification.timestamp | date: 'short'}}</small>
+                                </div>
+                                <div class="dropdown" style="width:60px;">
+                                    <button class="btn btn-secondary dropdown-toggle" color="btn-primary" type="button" id="editNotificationDropdown" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="editNotificationDropdown" style="width: 200px;">
+                                        <li *ngIf="notification.status === 0" (click)="readNotification(notification)" style="cursor: pointer">Mark as read</li>
+                                        <li class="mt-3" (click)="removeNotification(notification)" style="cursor: pointer">Remove notification</li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </ul>
+                    </div>
+                </div>
+                <li class="nav-item" *ngIf="user && user.username === ''">
+                    <a class="nav-link" [routerLink]="['login']">Login</a>
+                </li>
+                <li class="nav-item" *ngIf="user && user.username !== ''">
+                    <a class="nav-link" (click)="onLogout()">Logout</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="sendMessageModal" tabindex="-1" aria-labelledby="sendMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="sendMessageModalLabel">New message</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm()"></button>
+        </div>
+        <div class="modal-body">
+          <form #messageForm="ngForm" (ngSubmit)="sendNotificationToFollowers()">
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Content:</label>
+              <textarea class="form-control" id="message-text" name="messageContent" [(ngModel)]="messageContent" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Close</button>
+                <button type="submit" class="btn btn-primary">Send message</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

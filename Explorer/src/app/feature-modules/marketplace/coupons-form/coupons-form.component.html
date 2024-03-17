@@ -1,0 +1,23 @@
+<form [formGroup]="couponsform">
+    <div>
+      <mat-form-field>
+        <mat-label>Coupon Code</mat-label>
+        <input matInput formControlName="code" type="text" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Discount</mat-label>
+        <input matInput formControlName="discount" type="number" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Expiry Date</mat-label>
+        <input matInput formControlName="expiryDate" type="date" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Tour ID</mat-label>
+        <input matInput formControlName="tourId" type="number" />
+      </mat-form-field>
+      <button *ngIf="!shouldEdit" color="primary" type="submit" (click)="addCoupon()" mat-raised-button>Done</button>
+      <button *ngIf="shouldEdit" color="primary" type="submit" (click)="editCoupon()" mat-raised-button>Done</button>
+    </div>
+  </form>
+  

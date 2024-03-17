@@ -1,0 +1,98 @@
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="mb-3">
+                <label for="inputNameTour" class="form-label">Name:</label>
+                <input type="text" name="inputNameTour" id="inputNameTour" class="form-control" [(ngModel)]="tour.name">
+            </div>
+            <div class="mb-3">
+                <label for="inputDescriptionTour" class="form-label">Description:</label>
+                <input type="text" name="inputDescriptionTour" id="inputDescriptionTour" class="form-control" [(ngModel)]="tour.description">
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="mb-3">
+                <label for="inputDifficultyTour" class="form-label">Difficulty:</label>
+                <input type="number" name="inputDifficultyTour" id="inputDifficultyTour" class="form-control" [(ngModel)]="tour.difficult">
+            </div>
+            <!-- <div class="mb-3">
+                <label for="inputTagsTour" class="form-label">Tags:</label>
+                <input type="text" name="inputTagsTour" id="inputTagsTour" class="form-control" [(ngModel)]="tour.tags">
+            </div> -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6 mb-3">
+            <label class="form-label">Checkpoints:</label>
+            <ul class="list-group">
+                <li class="list-group-item"> <!-- ngFor goes here -->
+                    <div *ngFor="let point of tour.points" class="d-flex justify-content-between">
+                        <p class="justify-content-start">{{point.name}}</p>
+                        <div>
+                            <!-- <button class="btn btn-outline-secondary me-3">Set as public</button> -->
+                            <button class="btn btn-outline-danger" (click)="removePoint(point)">Remove</button>
+                            <!-- (click) for removing point goes here (if even needed) -->
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+            <div>
+                <label for="inputForPointName" class="form-label">Point name: </label>
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.name">
+                <label for="inputForPointName" class="form-label">Point description: </label>
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.description">
+                <label for="inputForPointName" class="form-label">Point picture: </label>
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.picture">
+                <button class="btn btn-outline-primary mt-3 me-3" (click)="addCheckpoint()">Add Checkpoint</button>
+            </div>
+            <button class="btn btn-outline-secondary mt-3" (click)="resetSelectedPoint()">Reset map picker</button>
+
+        </div>
+
+        <div class="col-6 mt-4">
+            <!-- <xp-map [(points)]="points"></xp-map> -->
+            <xp-map (longitude)="setLongitude($event)" (latitude)="setLatitude($event)"></xp-map>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-6">
+            <div class="mb-3">
+                <label for="inputLengthTour" class="form-label">Length (km):</label>
+                <input type="number" name="inputLengthTour" id="inputLengthTour" class="form-control" disabled>
+            </div>
+        </div>
+        <div class="col-6">
+
+            <div class="row">
+                <div class="col-6">
+                    <label for="inputRequiredTimeTour" class="form-label">Required time (minutes):</label>
+                    <input type="number" name="inputRequiredTimeTour" id="inputRequiredTimeTour" class="form-control" [(ngModel)]="tour.requiredTime.minutes">
+                </div>
+                <div class="col-6">
+                    <label for="inputLengthTour" class="form-label">Transport type:</label>
+                    <select class="form-select" [(ngModel)]="tour.requiredTime.transportType">
+                        <option selected>Select one</option>
+                        <option value="TransportType.Walking">Walking</option>
+                        <option value="TransportType.Bicycle">Bicycle</option>
+                        <option value="TransportType.Car">Car</option>
+                        <option value="TransportType.Boat">Boat</option>
+                      </select>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <button class="btn btn-secondary" (click)="save()">Save</button>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,41 @@
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Your own tours</h1>
+        </div>
+    </div>
+
+   
+    
+    <div class="row mt-4">
+        <div class="col-md-3 mb-5" *ngFor="let tour of tours">
+            <div class="card">
+               
+                <img [src]="tour.points[0].picture" alt="Tour Image" class="card-img-top" style="max-width: 350px; max-height: 180px;">
+
+
+                <div class="card-body">
+                    <h1 class="card-title">{{tour.name}}</h1>
+                    <p class="card-text mb-4">{{tour.description}}</p>
+                   
+                    <div class="card my-2 mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Difficulty: {{tour.difficult}}</li>
+                            <li class="list-group-item">Length: {{tour.length}}</li>
+                            
+                            
+                        </ul>
+                        <button class="btn btn-outline-primary" (click)="selectTourAndActivate(tour)">Activate</button>
+        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+       
+         
+        
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div *ngIf="sales.length > 0; else noSales">
+    <table>
+      <thead>
+        <tr>
+          <th>Sale Start</th>
+          <th>Sale End</th>
+          <th>Discount Percentage</th>
+          <th>Is Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of sales"> 
+          <td>{{ sale.saleStart | date }}</td>
+          <td>{{ sale.saleEnd | date }}</td>
+          <td>{{ sale.discountPercentage }}%</td>
+          <td>{{ sale.isActive ? 'Yes' : 'No' }}</td>
+          <td>
+            <button (click)="activateSale(sale.id)" [disabled]="sale.isActive">
+                {{ sale.isActive ? 'Activated' : 'Activate' }}
+            </button>
+        </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <ng-template #noSales>
+    <p>No sales available.</p>
+  </ng-template>

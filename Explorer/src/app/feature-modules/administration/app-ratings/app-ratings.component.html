@@ -1,0 +1,19 @@
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Ocena</th>
+                <th>Komentar</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr *ngFor="let rating of appRatings">
+                <td>{{rating.rating}}</td>
+                <td>{{rating.description}}</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</div>

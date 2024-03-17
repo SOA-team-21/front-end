@@ -1,0 +1,206 @@
+<div class="main">
+  <mat-grid-list cols="2" rowHeight="320px">
+      <mat-grid-tile>
+          <div class="tour-info-container">
+              <div class="header-div">{{tour.name}}</div>
+              <p>{{tour.description}}</p>
+              <p>Difficulty: {{tour.difficult}}</p>
+              <p>Status: {{tour.status}}</p>
+              <p>Price: {{tour.price}} AC</p>
+          </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div>
+          <div class="image-container">
+            <img [src]="currentPicture" alt="Slika" class="fit-image">
+            <div class="navigation-buttons">
+              <button mat-icon-button (click)="previousImage()" *ngIf="currentImageIndex > 0" class="prev-button">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+              </button>
+              <button mat-icon-button (click)="nextImage()" *ngIf="currentImageIndex < images.length - 1" class="next-button">
+                <mat-icon>keyboard_arrow_right</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile class="map-container">
+        <xp-map class="mapa" [points]="tour.points"></xp-map>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="tour-info-container">
+          <div class="header-div">Checkpoints:</div>
+          <div *ngFor="let c of tour.points; let i = index" class="checkpoint-container">
+            <span>{{ i + 1 }}   {{ c.name }}</span>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <!-- <div class="additional-info-container" *ngIf="problems && problems.length > 0">
+      <div class="header-div-problem">
+        Problems:
+        <button mat-icon-button class="add-button" *ngIf="user && user.role == 'tourist'" (click)="onProblemClicked()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="problem-row" *ngFor="let p of problems; let i = index">
+        <div class="problem-container" [ngClass]="{'even-row': i % 2 === 0, 'odd-row': i % 2 !== 0}">
+          <div class="shadow-box">
+            <div class="label-container">
+              <div class="label">Kategorija:</div>
+              <span class="category">{{ p.category }}</span>
+              <div class="label">Opis:</div>
+              <span class="description">{{ p.description }}</span> 
+          </div>
+        </div>
+      </div>  
+    </div> -->
+    
+    <div *ngIf="shouldRenderProblemForm" class="form-container">
+      <div class="problem-header">
+          <p>Report a Problem</p>
+      </div>
+      <form [formGroup]="problemForm">
+          <div>
+              <mat-form-field>
+                  <mat-label>Category</mat-label>
+                  <input matInput formControlName="category" type="text" />
+              </mat-form-field>
+          </div>
+          <div>
+              <mat-checkbox formControlName="priority">High Priority</mat-checkbox>
+          </div>
+          <div>
+              <mat-form-field>
+                  <mat-label>Description</mat-label>
+                  <input matInput formControlName="description" type="text" />
+              </mat-form-field>
+          </div>
+          <div>
+          </div>
+          <div>
+              <button type="button" class="submit-problem-button" (click)="addProblem()">Submit</button>
+          </div>
+      </form>
+    </div>
+      <div class="button-div mt-2"> 
+  
+        <input *ngIf="user && user.role == 'tourist' && !isPaid" type="text" placeholder="Enter coupon code" (input)="onCouponCodeChange($event)">
+  
+        <button *ngIf="user && user.role == 'tourist' && !isPaid" mat-raised-button class="buy-button"
+        [style.background-color]="'#00BBFF'" [style.color]="'#F7FFF7'" (click)="addToCart()">Add to cart
+        </button>
+  
+        <button *ngIf="user && user.role == 'tourist' && isPaid" mat-raised-button class="buy-button"
+        [style.background-color]="'#00BBFF'" [style.color]="'#F7FFF7'" (click)="activateTour()">Activate
+        </button></div>
+
+        <button *ngIf="tour && !tour.myOwn && tour.reviews.length == 0 && user && user.role == 'tourist'" class="mt-5 mb-3 d-flex justify-content-between align-items-end ms-auto btn btn-outline-secondary text-dark"
+              data-bs-toggle="modal"
+             data-bs-target="#tourReviewModal">Add a review</button>
+    
+    
+        <div *ngIf="tour && tour.reviews && tour.reviews.length > 0" class="reviews-container my-5">
+          <h2 class="header-div text-muted">Reviews</h2>
+          <!-- <div class="mx-auto text-end d-inline-block d-flex justify-content-between align-items-end mb-2">
+            <div class="average-rating border border-2 rounded p-3" style="width: 110px">
+              <h3 class="me-3" style="font-size: 26px;">{{ averageRating | number:'1.1-1' }}</h3>
+              <div class="star-rating">
+                <div class="stars">
+                  <ng-container *ngFor="let _ of [].constructor(5); let i = index">
+                    <i class="bi bi-star-fill" [ngClass]="{'text-warning': i < averageRating, 'text-muted': i >= averageRating}"></i>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="mb-3 d-inline-block d-flex justify-content-between align-items-end">
+            <button class="ms-auto btn btn-outline-secondary text-dark"
+            *ngIf="user && !tour.myOwn && user.role == 'tourist'" data-bs-toggle="modal"
+            data-bs-target="#tourReviewModal">Add a review</button>
+          </div>
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div *ngFor="let review of tour.reviews" class="col">
+              <div class="card w-100">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span  class="fw-bold">{{ review.touristUsername }}</span>
+                    <div>
+                      <small class="text-muted d-block">
+                        Created: {{ review.creationDate | date:'shortDate' }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <p class="card-text"></p>
+                    <p class="card-text">
+                      <ng-container *ngFor="let _ of [].constructor(review.rating); let i = index">
+                        <i class="bi bi-star-fill text-warning"></i>
+                      </ng-container>
+                    </p>
+                  </div>
+                  <div class="my-2">
+                    <p class="card-text">{{ review.comment }}</p>
+                  </div>
+                  <div *ngIf="review.images && review.images.length > 0" class="mb-3">
+                    <div class="d-flex mt-4">
+                      <div *ngFor="let image of review.images" class="me-2">
+                        <img [src]="image" alt="Review Image" style="width: 100px; height: 100px; object-fit: cover;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p></p>
+                    <small class="text-muted text-end" style="text-align: right;">
+                      Tour visited: {{ review.tourDate | date:'shortDate' }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+  <div class="modal" id="tourReviewModal" tabindex="-1" aria-labelledby="tourReviewModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title fs-4 my-4 text-muted w-100">{{ tour.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="reviewForm">
+                    <div class="mb-5">
+                        <div class="form-check d-inline-flex  my-4 me-3 ms-5" *ngFor="let i of [1, 2, 3, 4, 5]">
+                            <input class="form-check-input" type="radio" [value]="i" formControlName="rating">
+                            <label class="form-check-label ms-1">{{i}}</label>
+                        </div>
+                        <div class="input-group mb-3 mt-3">
+                            <input type="text" class="form-control" formControlName="comment" placeholder="Comment" style="height: 70px;">
+                        </div>
+                        <div class="form-item my-3">
+                            <label class="form-label my-3">The date you visited the tour:</label>
+                            <input type="date" class="form-control" formControlName="tourDate" placeholder="Date of Tour">
+                        </div>
+                        <div class="form-item my-3">
+                            <label class="form-label my-3">Upload images:</label>
+                            <input type="file" class="form-control" multiple (change)="onFileSelected($event)">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="close-tour-review-modal-button" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="addReview()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+  
+  
+  
+  
+  
+  

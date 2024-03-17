@@ -1,0 +1,30 @@
+<div id="tours">
+    <h2>All tours on sale</h2>
+    <div id="tours-details" class="div-tour-details d-flex align-items-center justify-content-center">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Old Price</th>
+                        <th>New Price</th> 
+                        <th>Discount</th> 
+                        <th>Sale ends on</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let sale of sales">
+                    <tr *ngFor="let tour of sale.toursOnSale ">
+                        <td>{{tour.name}}</td>
+                        <td>{{tour.description}}</td>
+                        <td class="old-price">{{tour.price}}</td>
+                        <td class="new-price">{{calculateNewPrice(tour )}}</td>
+                        <td>{{sale.discountPercentage}}%</td>
+                        <td>{{ formatSaleEndDate(sale.saleEnd) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button (click)="toggleSortOrder()">Sort</button>
+</div>

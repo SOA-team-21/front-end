@@ -1,0 +1,41 @@
+<div id="coupons">
+    <p>coupons</p>
+    <hr>
+    <div id="coupons-details">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Discount</th>
+                    <th>ExpiryDate</th>
+                    <th>TourId</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let coupon of coupons">
+                    <td>{{coupon.code}}</td>
+                    <td>{{coupon.discount}}</td>
+                    <td>{{coupon.expiryDate}}</td>
+                    <td>{{coupon.tourId}}</td>
+                    <td>
+                        <button color="accent" (click)="deleteCoupon(coupon.id || 0)" mat-icon-button>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button color="primary" (click)="onEditClicked(coupon)" mat-icon-button>
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr><button color="primary" (click)="onAddClicked()" mat-icon-button>
+                    <mat-icon>add</mat-icon>
+                </button></tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <xp-coupons-form *ngIf="shouldRenderPreferenceForm" [shouldEdit]="shouldEdit" [coupons]="selectedCoupon" (couponsUpdated)="getAllCoupons()"></xp-coupons-form>
+    </div>
+    </div>
+</div>

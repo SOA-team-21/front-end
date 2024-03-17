@@ -1,0 +1,36 @@
+<form [formGroup]="objectsForm">
+  <xp-map (latitude)="GetLatitude($event)" (longitude)="GetLongitude($event)"></xp-map>
+  <div>
+    <mat-form-field>
+      <mat-label>Longitude</mat-label>
+      <input matInput formControlName="longitude" type="number">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Latitude</mat-label>
+      <input matInput formControlName="latitude" type="number">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" type="text">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                formControlName="description"
+                cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Picture</mat-label>
+      <input matInput formControlName="picture" type="text">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <input matInput formControlName="category" type="text">
+    </mat-form-field>
+    <mat-checkbox formControlName="checkBoxControl">Public object</mat-checkbox>
+    <button *ngIf="!shouldEdit" mat-raised-button type="submit" color="primary" (click)="addObject()">Done</button>
+    <button *ngIf="shouldEdit" mat-raised-button type="submit" color="primary" (click)="updateObject()">Done</button>
+  </div>
+</form>

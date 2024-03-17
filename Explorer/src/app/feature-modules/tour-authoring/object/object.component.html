@@ -1,0 +1,45 @@
+<div id="objects">
+  <p>Objects</p>
+  <hr>
+  <div id="objects-details">
+    <div>
+      <table>
+        <thead>
+        <tr>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Picture</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let object of objects">
+          <td>{{object.longitude}}</td>
+          <td>{{object.latitude}}</td>
+          <td>{{object.name}}</td>
+          <td>{{object.description}}</td>
+          <td>{{object.picture}}</td>
+          <td>{{object.category}}</td>
+          <td>
+            <button color="accent" (click)="deleteObject(object.id)" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button color="accent" (click)="onEditClicked(object)" mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <button color="primary" (click)="onAddClicked()" mat-icon-button>
+            <mat-icon>add</mat-icon>
+          </button>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <xp-object-form *ngIf="shouldRenderObjectForm" (objectUpdated)="getObjects()" [object]="selectedObject" [shouldEdit]="shouldEdit"></xp-object-form>
+    </div>
+  </div>
+</div>

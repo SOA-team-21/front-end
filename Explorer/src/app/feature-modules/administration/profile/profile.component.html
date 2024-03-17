@@ -1,0 +1,127 @@
+<div id="profile">
+
+    <div class="container position-relative">
+
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <p><strong>Level: </strong> {{person.level}}</p>
+                    <p><strong>XP: </strong> {{person.xp}}</p>
+                </div>
+            </div>
+        
+            <div class="col-6 text-end">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#preferencesModal">Preferences</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center mt-5">
+
+                <img src="{{person.picture}}" height="220">
+                <h1 class="m-4" style="font-size:xx-large">{{person.name}} {{person.surname}}</h1>
+
+                <p class="text-center m-2 mb-3">{{person.bio}}</p>
+
+                <p class="text-center m-2"><i>{{person.quote}}</i></p>
+
+                <p class="text-center mt-3">Wallet balance: {{wallet.coins}} AC</p>
+
+                <button (click)="editProfile(person)" type="button" class="btn btn-secondary m-3" data-bs-toggle="modal"
+                    data-bs-target="#EditProfileFormModal">
+                    Edit profile
+                </button>
+
+                <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal"
+                    data-bs-target="#ProfileFollowersModal">
+                    Followers
+                </button>
+
+                <div class="modal fade" id="EditProfileFormModal" data-bs-backdrop="static" tabindex="-1"
+                    aria-labelledby="EditProfileFormModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="EditProfileFormModalLabel">Edit profile</h1>
+                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <xp-profile-form [profile]="selectedProfile" (profileUpdated)="getUser()">
+                                </xp-profile-form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="ProfileFollowersModal" data-bs-backdrop="static" tabindex="-1"
+                    aria-labelledby="ProfileFollowersModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ProfileFollowersModalLabel">Followers</h1>
+                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div *ngFor="let follower of this.user.followers" class="card m-2">
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{follower.username}}</h3>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h2 class="modal-title fs-5" id="preferencesModalLabel">Preferences</h2>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+                            <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <div *ngFor="let pre of preferences" class="card mb-3">
+                                        <div class="card-body">
+                                            <p>Difficulty:
+                                                <span [ngSwitch]="pre.difficulty">
+                                                    <ng-container *ngSwitchCase="1">{{pre.difficulty}} - Easy</ng-container>
+                                                    <ng-container *ngSwitchCase="2">{{pre.difficulty}} - Moderate</ng-container>
+                                                    <ng-container *ngSwitchCase="3">{{pre.difficulty}} - Intermediate</ng-container>
+                                                    <ng-container *ngSwitchCase="4">{{pre.difficulty}} - Hard</ng-container>
+                                                    <ng-container *ngSwitchCase="5">{{pre.difficulty}} - Very Hard</ng-container>
+                                                </span>
+                                            </p>
+                                            <p>Transport: {{pre.transport}}</p>
+                                            <p>#{{pre.tags}}</p>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <button class="btn btn-primary" (click)="onEditClicked(pre)">Edit <i class="bi bi-pencil-fill"></i></button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-danger" (click)="deletePreference(pre.id || 0)">Delete <i class="bi bi-trash-fill"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>        
+                            </div>
+                            <div class="row">
+                                <xp-preference-form *ngIf="shouldRenderPreferenceForm" [shouldEdit]="shouldEdit" [preference]="selectedPreference" (preferenceUpdated)="getPreferences()"></xp-preference-form>
+                            </div>  
+                            <div class="row mt-3">
+                                <button class="btn btn-success" (click)="onAddClicked()">Add <i class="bi bi-plus"></i></button>
+                            </div>
+                            <div class="row">
+                                <xp-preference-form *ngIf="shouldRenderAdd" [shouldEdit]="shouldEdit" (preferenceUpdated)="getPreferences()"></xp-preference-form>
+                            </div>
+                        </div>   
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div id="equipment">
+    <p>Equipment record</p>
+    <hr>
+    <div id="equipment-details">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Naziv</th>
+                    <th>Opis</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let eq of equipments">
+                    <td>{{eq.name}}</td>
+                    <td>{{eq.description}}</td>
+                    <td>
+                       <button color="accent" class="custom-button" (click)="removeEquipmentRecord(eq)" mat-icon-button>
+                            Remove equipment
+                        </button>
+                       <button color="primary" class="custom-button" (click)="addEquipmentRecord(eq)" mat-icon-button>
+                            Add equipment
+                        </button>   
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+

@@ -1,0 +1,33 @@
+   
+<div id="myMembers">
+    <p>Members of club:{{club.name}} <p>
+    <div id="myMembers-details">
+    <div>
+        <table align="center">
+            <thead>
+                <tr>
+                    <th>Tourist</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let clubMember of clubMembers">
+                    <td>{{clubMember.touristId}}</td>
+                    
+                    <td>
+                        <button color="accent" (click)="deleteClubMember(clubMember.id || 0)" mat-icon-button>
+                            <mat-icon>delete</mat-icon>
+                            
+                        </button>
+                    </td>
+                </tr>
+              
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+
+
+

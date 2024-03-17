@@ -1,0 +1,57 @@
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Recommended tours for you</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-2 d-flex align-items-center">
+            <span style="margin-right: 10px;">Select rating...</span>
+            <select class="form-control" [(ngModel)]="selectedRating">
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+            </select>
+        </div>
+    </div>
+    
+
+    
+    
+      
+    <div class="row mt-4">
+        <div class="col-md-3 mb-5" *ngFor="let tour of getFilteredTours()">
+            <div class="card">
+               
+                <img [src]="tour.points[0].picture" alt="Tour Image" class="card-img-top" style="max-width: 350px; max-height: 180px;">
+
+
+                <div class="card-body">
+                    <h1 class="card-title">{{tour.name}}</h1>
+                    <p class="card-text mb-4">{{tour.description}}</p>
+                    <td> Rating: {{tour.id !== undefined ? (averageRatings[tour.id] !== undefined ? averageRatings[tour.id] :
+                        "No reviews") : "No reviews"}}</td>
+                    <div class="card my-2 mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Difficulty: {{tour.difficult}}</li>
+                            <li class="list-group-item">Length: {{tour.length}}</li>
+                            <li class="list-group-item">Price: {{tour.price}}</li>
+                            
+                        </ul>
+                        <button class="btn btn-outline-primary" (click)="selectTourAndShop(tour)">Shopping</button>
+        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+       
+                
+        
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<xp-search-form (searchClicked)="getSearchResults()"></xp-search-form>
+<div class="search-results-container">
+    <div class="header-container">
+        <h1 class="header">Search results</h1>
+    </div>
+    <div class="search-results-grid">
+        <div class="search-result" *ngFor="let tour of tours">
+            <div class="box" [routerLink]="['../show-tour/' + tour.id]">
+                <img class="image" [src]="tour.points[0].picture"
+                    alt="TURA">
+                <span class="title-box">{{tour.name}}</span>
+                <span class="description-box">{{tour.description}}</span>
+                <div class="ratings">
+                    <div class="star-placeholder">
+                        <ngb-rating [max]="5" [(rate)]="starRating" [readonly]="true"></ngb-rating>
+                    </div>
+                    <span>13,257</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

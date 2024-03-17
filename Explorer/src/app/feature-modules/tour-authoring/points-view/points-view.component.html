@@ -1,0 +1,130 @@
+<div class="container my-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Create your own tour</h1>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="Header">
+                <h1 class="text-center">Choose points</h1>
+            </div>
+            
+            <div>
+               
+                <div class="col-12" style="height: 25rem; overflow-y: scroll;">
+                    <div class="card my-2" *ngFor="let point of points">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="card-title">{{point.name}}</h2>
+                                <p class="card-text">{{point.description}}</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="image-container">
+                                    <img [src]="point.picture" class="img-thumbnail img-fluid" style="max-width: 150px; max-height: 150px;">
+                                </div>
+                                <input class="form-check-input ms-3 custom-checkbox" type="checkbox" (change)="onSelect(point)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   
+            <div class="text-center my-4">              
+                <button class="btn btn-outline-primary mr-2" (click)="findTours()">Find Tours</button>
+                <span class="button-separator">or you can</span>
+                
+                <button class="btn btn-outline-primary mr-2" data-bs-toggle="modal" data-bs-target="#createTourModal"
+                >Create own tour</button>
+        
+            </div>
+            <div class="modal fade" id="createTourModal">
+                <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title">Create Your Own Tour</h1>
+                            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                
+                                <div class="form-group">
+                                    <label for="tourName">Name</label>
+                                    <input type="text" class="form-control" id="tourName" [(ngModel)]="tour.name" name="tourName" placeholder="Enter tour name" required>
+                                </div>
+                                
+                               
+                                <div class="form-group">
+                                    <label for="tourDescription">Description</label>
+                                    <textarea class="form-control" id="tourDescription" rows="3" [(ngModel)]="tour.description" name="tourDescription" placeholder="Describe the tour" required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="tourRequiredTime" >Required time</label>
+                                    <input type="number" class="form-control" id="tourRequiredTime" [(ngModel)]="tour.requiredTime.minutes" name="tourRequiredTime" placeholder="Enter required time in minutes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputLengthTour">Transport type:</label>
+                                    <select class="form-select" [(ngModel)]="tour.requiredTime.transportType">
+                                        
+                                        <option value="TransportType.Walking">Walking</option>
+                                        <option value="TransportType.Bicycle">Bicycle</option>
+                                        <option value="TransportType.Car">Car</option>
+                                        <option value="TransportType.Boat">Boat</option>
+                                      </select>
+                                </div>
+            
+                                <div class="form-group">
+                                    <label for="tourDifficulty">Difficulty</label>
+                                    <input type="number" class="form-control" id="tourDifficulty" [(ngModel)]="tour.difficult" name="tourDifficulty"  placeholder="Enter tour difficulty" min="1" required>
+                                </div>
+                                
+                               
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" (click)="save()" >Save Tour</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-5" *ngFor="let tour of tours">
+            <div class="card"  [routerLink]="['../show-tour/' + tour.id]">
+              
+                <img [src]="tour.points[0].picture" alt="Tour Image" class="card-img-top" style="max-width: 500px; max-height: 300px;">
+
+
+                <div class="card-body">
+                    <h1 class="card-title">{{tour.name}}</h1>
+                    <p class="card-text mb-4">{{tour.description}}</p>
+                    <div class="card my-2 mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Difficulty: {{tour.difficult}}</li>
+                            <li class="list-group-item">Length: {{tour.length}}</li>
+                            <li class="list-group-item">Price: {{tour.price}}</li>
+                            <li [ngClass]="{'contains-points': checkForUnselectedPoints(tour)}" class="list-group-item">
+                                {{ checkForUnselectedPoints(tour) ? "Contains additional points" : "Doesn't contain additional points" }} </li>
+                        </ul>
+                        <button class="btn btn-outline-primary" (click)="selectTourAndShop(tour)">Add to cart</button>
+        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+       
+       
+    
+        
+
+
+        </div>
+    </div>
+</div>

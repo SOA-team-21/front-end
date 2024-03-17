@@ -1,0 +1,35 @@
+
+<div class="horizontal">
+    <div id="membership-requests-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tourist</th>
+                        <th>Club</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let m of membershipRequests">
+                        <td>{{m.touristId}}</td>
+                        <td>{{m.clubId}}</td>
+                        <td>
+                            <button color="primary" (click)="onClickAccept(m)" mat-icon-button>
+                               Accept
+                            </button>
+                        </td>
+                        <td>
+                            <button color="primary"(click)="onClickReject(m)" mat-icon-button>
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    
+    

@@ -1,0 +1,37 @@
+<div id="tourReviews">
+    <div class="tourReviewHeader">
+        <p>Tour Reviews for tour : {{tour.name}}</p>
+    </div>
+    <hr>
+    <div id="tourReview-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Tourist</th>
+                        <th>Tour date</th>
+                        <th>Review date</th>
+                        <th>Images</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tourReview of tour.reviews">
+                        <td>{{tourReview.rating}}</td>
+                        <td>{{tourReview.comment}}</td>
+                        <td>{{tourReview.touristUsername}}</td>
+                        <td>{{tourReview.tourDate}}</td>
+                        <td>{{tourReview.creationDate}}</td>
+                        <td class="image-container">
+                                <img *ngFor="let image of tourReview.images" [src]="image"
+                                    class="img-responsive img-thumbnail" style="width:150px;height:150px">
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

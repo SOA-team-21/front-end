@@ -1,0 +1,76 @@
+p {
+    margin-top: 50px;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#tours {
+    margin: 0 auto;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 300px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead tr {
+    background-color: #363636; /* Dark gray background color */
+    color: #ffffff;
+    text-align: center;
+}
+
+th, td {
+    padding: 12px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #3f51b5;
+}
+
+tbody tr.active-row {
+    font-weight: bold;
+    color: #3f51b5;
+}
+
+.problem-header {
+    text-align: center;
+}
+
+.button-td {
+    display: flex;
+    flex-direction: row;
+} 
+
+td.old-price {
+    text-decoration: line-through;
+    color: #ca2525; /* Adjust the color as needed */
+}
+
+/* Style for New Price */
+td.new-price {
+    font-weight: bold;
+    color: #4caf50; /* Adjust the color as needed */
+}
+
+button {
+    margin-top: 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #363636; /* Dark gray background color */
+    color: #ffffff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    cursor: pointer;
+}

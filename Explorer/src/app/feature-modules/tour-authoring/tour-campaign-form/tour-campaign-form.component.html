@@ -1,0 +1,94 @@
+<div class="container my-4">
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Create a Tour Campaign</h1>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <div class="row">
+                <h1 class="text-center">Purchased tours</h1>
+            </div>
+            <div class="row px-4">
+
+                <div class="col-12" style="height: 20rem; overflow-y: scroll;">
+                    <div class="card my-2" *ngFor="let tour of availableTours">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="card-title">{{tour.name}}</h2>
+                                <p class="card-text">{{tour.description}}</p>
+                            </div>
+                            <button class="btn btn-outline-primary" (click)="selectTour(tour)"><i class="bi bi-plus-lg"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="row">
+                <h1 class="text-center">Added to campaign</h1>
+            </div>
+            <div class="row px-4">
+
+                <div class="col-12" style="height: 20rem; overflow-y: scroll;">
+
+                    <div class="card my-2" *ngFor="let tour of selectedTours">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="card-title">{{tour.name.length > 40 ? tour.name.substring(0, 50) + '...' : tour.name}}</h2>
+                                <p class="card-text">{{tour.description.length > 50 ? tour.description.substring(0, 50) + '...' : tour.description}}</p>
+                            </div>
+                            <div style="flex-wrap: nowrap;">
+                                <button class="btn btn-outline-secondary mx-2" 
+                                    *ngIf="selectedTours.indexOf(tour) !== 0"
+                                    (click)="moveUp(tour)">
+                                    <i class="bi bi-chevron-up"></i></button>
+                                <button class="btn btn-outline-secondary mx-2" 
+                                    *ngIf="selectedTours.indexOf(tour) !== selectedTours.length-1"
+                                    (click)="moveDown(tour)">
+                                    <i class="bi bi-chevron-down"></i></button>
+
+                                <button class="btn btn-outline-danger ms-2" (click)="deselectTour(tour)"><i class="bi bi-x-lg"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 justify-content-center">
+        <div class="col-6">
+            <div class="row">
+                <h1 class="text-center">Campaign information</h1>
+            </div>
+            <div class="row px-5">
+
+                <div class="input-group my-2">
+                    <span class="input-group-text" style="width: 10rem;">Campaign name:</span>
+                    <input type="text" aria-label="First name" class="form-control" placeholder="Campaign name"
+                    [(ngModel)]="campaignName">
+                </div>
+                <div class="input-group my-2">
+                    <span class="input-group-text" style="width: 10rem;">Total length:</span>
+                    <input type="text" aria-label="First name" class="form-control" placeholder="" 
+                        disabled [(ngModel)]="totalLength">
+                </div>
+                <div class="input-group my-2">
+                    <span class="input-group-text" style="width: 10rem;">Total difficulty:</span>
+                    <input type="text" aria-label="First name" class="form-control" placeholder="5" 
+                        disabled [(ngModel)]="totalDifficulty">
+                </div>
+            </div>
+            <div class="text-center my-5">
+                <button class="btn btn-outline-primary" (click)="createCampaign()">Create a campaign</button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,45 @@
+<div class="horizontal">
+<div id="equipment-details">
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th></th>
+                    <th *ngIf="flag"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let c of clubs">
+                    <td>{{c.name}}</td>
+                    <td>{{c.description}}</td>
+                    <td>{{c.url}}</td>
+                    <td>
+                        <button color="primary" (click)="onEditClicked(c)" mat-icon-button>
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button color="primary" (click)="onMemberClicked(c)" mat-icon-button>
+                            <mat-icon>people</mat-icon>
+                        </button>
+                    </td>
+                    <td *ngIf = "flag">
+                        <button color="primary"(click)="join(c)" mat-icon-button>
+                            Join
+                        </button>
+                    </td>
+                </tr>
+                <tr><button color="primary" (click)="onAddClicked()" mat-icon-button>
+                    <mat-icon>add</mat-icon>
+                </button></tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div>
+        <xp-club-form *ngIf="shouldRenderClubForm" [shouldEdit]="shouldEdit" [club]="selectedClub"  (clubsUpdated)="getClubs()"></xp-club-form>
+        <xp-club-members *ngIf="shouldRenderClubMemberForm" (visibilityFlag)="changeReviewVisibility()" [club]="selectedClub"></xp-club-members>
+    </div>
+</div>
+

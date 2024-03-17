@@ -1,0 +1,26 @@
+.btn-secondary {
+  background-color: transparent;
+  color: inherit;
+  border: 0px;
+}
+
+.btn-secondary::after {
+  display: none;
+}
+
+.plain-button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.notification-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-container p {
+  margin-bottom: 0.5rem;
+}

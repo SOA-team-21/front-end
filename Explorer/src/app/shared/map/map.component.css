@@ -1,0 +1,9 @@
+.map-frame {
+    border-radius: 0px;
+  }
+
+#map {
+    height: 20rem;
+    width: 90%;
+    border-radius: 0px;
+  }

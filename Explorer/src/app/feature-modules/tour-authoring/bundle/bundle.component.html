@@ -1,0 +1,58 @@
+<div id="tourReviews">
+    <div class="tourReviewHeader">
+        <h1>Bundles</h1>
+    </div>
+    <div class="col-12 d-flex align-items-center justify-content-between">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createTourModal" *ngIf="user && user.role === 'author'"
+            (click)=" onAddClicked()">Create a bundle</button>
+    </div>
+
+    <div class="modal fade" id="createTourModal">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" *ngIf="!shouldEdit">Create a bundle</h1>
+                    <h1 class="modal-title" *ngIf="shouldEdit">Edit bundle</h1>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <xp-create-bundle (closeModal)="closeModal()"></xp-create-bundle>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tourReview-details">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bundle of bundles">
+                        <td>{{bundle.name}}</td>
+                        <td>{{bundle.price}}</td>
+                        <th>
+                            <button class="btn btn-primary"
+                                *ngIf="user && user.role === 'author' && bundle.status ==  0"
+                                (click)="publish(bundle.id)">Publish</button>
+                            <button class="btn btn-primary" *ngIf="user && user.role === 'author' && bundle.status == 1"
+                                (click)="archive(bundle.id)">Archive</button>
+                            <button class="btn btn-danger" *ngIf="user && user.role === 'author' && bundle.status == 0"
+                                (click)="delete(bundle.id)">Delete</button>
+                            <button class="btn btn-primary"
+                                *ngIf="user && user.role === 'tourist' && bundle.status == 1"
+                                (click)="addToCart(bundle)">Add to cart</button>
+                        </th>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

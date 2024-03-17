@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <div class="row d-flex align-items-start">
+        
+        <div class="col-6">
+            <h1 class="text-center">Send club invitation</h1>
+           
+            <form [formGroup]="clubInvitationForm">
+                
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">For tourist:</span>
+                    <input type="number" min="1" class="form-control" placeholder="id" formControlName="touristId">
+                </div>
+               
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">From club:</span>
+                    <input type="number" min="1" class="form-control" placeholder="id" formControlName="clubId">
+                </div>
+            
+            </form>
+            <button class="btn btn-outline-primary" (click)="addClubInvitation()">Send</button>
+        </div>
+
+       
+        <div class="col-6">
+            <h1 class="text-center">Invitations for me</h1>
+            
+            <div class="custom-alignment">
+                <xp-club-invitations #clubInvitationsRef></xp-club-invitations>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+

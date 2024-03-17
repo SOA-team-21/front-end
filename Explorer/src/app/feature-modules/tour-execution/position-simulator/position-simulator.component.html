@@ -1,0 +1,240 @@
+
+<div class="container mt-4">
+  <div class="row">
+    <h1 class="text-center"><b>{{tour.name}}</b></h1>
+  </div>
+  <div class="row justify-content-center ">
+    <div class="col-6">
+      <form [formGroup]="positionForm">
+        <div class="row mt-3">
+          <xp-map  
+          [points]="points" 
+          [socialEncounters]="socialEncounters" 
+          [hiddenEncounters]="hiddenEncounters"
+          [miscEncounters]="miscEncounters"
+          (markerClicked)="handleMarkerClick($event)"
+          (yellowMarkerClicked)="handleYellowMarkerClick($event)"
+          (blackMarkerClicked)="handleBlackMarkerClick($event)"
+          (latitude)="GetLatitude($event)" 
+          (longitude)="GetLongitude($event)"></xp-map>
+        </div>
+        <div *ngIf="showDiv">
+          <mat-form-field>
+            <mat-label>Longitude</mat-label>
+            <input matInput formControlName="longitude" type="number" readonly>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Latitude</mat-label>
+            <input matInput formControlName="latitude" type="number" readonly>
+          </mat-form-field>    
+        </div>
+        <div class="row justify-content-center" *ngIf="showMessage">
+          <div class="col-12 justify-content-center">
+            <div class="row mt-3 text-center">
+              <h2><b>The tour is finished</b></h2>
+            </div>
+            <div class="row mt-3 ml-5 mr-5">
+              <button (click)="returnToHomePage()" class="btn btn-success">Return to home page</button>
+            </div>
+            <div class="row mt-3 ml-5 mr-5">
+              <button *ngIf="tour && !tour.myOwn" (click)="showReviewForm()" class="button" class="btn btn-secondary">Add review</button>
+            </div>
+            <div class="row mt-3">
+              <button  (click)="showBlogForm()" class="button" class="btn btn-secondary">Create blog</button>
+            </div>
+            <div class="row mt-3 justify-content-center">
+              <div class="col-6">
+                <xp-tour-review-form *ngIf="isShowReviewFormEnabled" [tour]="tour"></xp-tour-review-form>
+              </div>
+            </div>       
+            <xp-blog-form *ngIf="isCreateBlogFormEnabled" [tour]="tour"></xp-blog-form>
+          </div>
+        </div>
+        <div *ngIf="showMap" class="row mt-3 ">
+            <div class="col-6">
+              <div class="row">
+                <div class="col-7">
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="submit" color="primary" (click)="confirmPosition()">Confirm position</button>
+                </div>
+                <div class="col-5">
+                  <button (click)="quitTour()" [routerLink]="['tour-exit']" class="btn btn-danger float-start">Quit</button>
+                </div>
+              </div> 
+            </div>
+            <div class="col-6">
+              <button class="btn btn-primary float-end" *ngIf="clickedMarker"  data-bs-toggle="modal" data-bs-target="#staticBackdrop1" (click)="socialEncounterButton()" > Social Encounter</button>
+              <button class="btn btn-primary float-end" *ngIf="clickedBlackMarker" (click)="hiddenEncounterButton()" color="primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Hidden Encounter</button>
+              <button class="btn btn-primary float-end"  *ngIf="clickedYellowMarker" (click)="miscEncounterButton()"  color="primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Misc Encounter</button>
+            </div>   
+        </div>
+        
+      </form>
+    </div>
+  </div>
+  <div  #staticBackdrop class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{lastTaskPoint.name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            {{lastTaskPoint.description}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div  #staticBackdrop class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{encounterModal.name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Description
+                  </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">{{encounterModal.description}}</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Location
+                  </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">              <p><strong>Longitude: </strong> {{encounterModal.location.longitude}}</p><p><strong> Latitude:</strong> {{ encounterModal.location.latitude }} </p></div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                   Experience
+                  </button>
+                </h2>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">{{encounterModal.experience}}</div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                    Required participants
+                   </button>
+                </h2>
+                <div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body">{{encounterModal.requiredParticipants}}</div>
+                </div>
+              </div>
+            </div>
+              <ul class="list-group">
+                <li class="list-group-item active"  aria-current="true">Participants</li>
+                <li class="list-group-item" *ngFor="let part of encounterModal.participants"><h3>{{part.username}}</h3></li>
+              </ul>
+        </div>
+        <div class="modal-footer">
+          <button *ngIf="canActivate" type="button" class="btn btn-outline-success" (click)="activateSocialEncounter()" >Activate</button>
+          <button *ngIf="canSolve" type="button" class="btn btn-outline-success" (click)="solveSocialEncounter()">Solve</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{selectedHiddenEncounter.name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <p><strong>Description:</strong></p>
+            <p>{{ selectedHiddenEncounter.description }}</p>
+          </div>
+            <p><strong>Experience:</strong> {{ selectedHiddenEncounter.experience }}</p>
+            <div *ngIf="canSolveHiddenEncounter">
+              <img src="{{selectedHiddenEncounter.image}}" class="img-fluid" alt="" srcset="">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button *ngIf="canActivateHiddenEncounter" type="button" class="btn btn-primary" (click)="activateHiddenEncounter()">Activate</button>
+        </div>
+        <div class="modal-footer">
+          <button *ngIf="canSolveHiddenEncounter" type="button" class="btn btn-success" (click)="solveHiddenEncounter()">Solve</button>
+        </div>
+      </div>
+   </div>
+  </div>
+
+  <div  #staticBackdrop class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{miscModal.name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="accordion accordion-flush" id="accordionFlushExample1">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  Description
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample1">
+                <div class="accordion-body">{{miscModal.description}}</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  Location
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample1">
+                <div class="accordion-body">Lokacija</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                 Experience
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample1">
+                <div class="accordion-body">{{miscModal.experience}}</div>
+              </div>
+            </div>
+          </div>
+            <ul class="list-group">
+              <li class="list-group-item active"  aria-current="true">Participants</li>
+              <li class="list-group-item" *ngFor="let part of miscModal.participants"><h3>{{part.username}}</h3></li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+          <button *ngIf="canActivate" type="button" class="btn btn-outline-success" (click)="activateMiscEncounter()" >Activate</button>
+          <button *ngIf="canSolve" type="button" class="btn btn-outline-success" (click)="solveMiscEncounter()">Solve</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+

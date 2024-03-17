@@ -1,0 +1,11 @@
+<div class="search-container">
+    <img class="search-image" src="https://images.unsplash.com/photo-1574768679719-ee0550fb00f9?auto=format&fit=crop&q=80&w=1906&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pZmRlZnwxOTI4fHx8fHx8fA%3D%3D" alt="Your Image">
+    <div class="search-overlay"></div>
+    <div class="search-text">Where to?</div>
+    <div class="search-bar">
+        <input type="text" class="search-input location" placeholder="Location">
+        <input type="date" class="search-input date" [(ngModel)]="startDate" [placeholder]="startDatePlaceholder">
+        <input type="date" class="search-input date" [(ngModel)]="endDate" [placeholder]="endDatePlaceholder">
+        <mat-icon class="search-button">search</mat-icon>
+    </div>
+</div>

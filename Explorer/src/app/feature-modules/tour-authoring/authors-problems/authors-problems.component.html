@@ -1,0 +1,48 @@
+<div id="aproblems">
+    <div>
+        <p>All tour problems</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Description</th>
+                <th>Time</th>
+                <th>Respond</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let problem of problems">
+                <td>{{problem.category}}</td>
+                <td>{{problem.priority ? 'High' : 'Low'}}</td>
+                <td>{{problem.authorsSolution}}</td>
+                <td>{{problem.time | date:'short'}}</td>
+                <td class="button-ap">
+                    <button color="primary" (click)="onRespondClicked(problem)" mat-icon-button>
+                      Respond
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="shouldRenderRespondForm">
+        <div class="respond-header">
+          <p>Respond to Problem</p>
+        </div>
+        <form [formGroup]="respondForm" (ngSubmit)="onSubmitResponse()">
+            <div>
+              <mat-form-field>
+                <mat-label>Response</mat-label>
+                <input matInput formControlName="response" type="text" />
+              </mat-form-field>
+            </div>
+            <div class="form-submit">
+                <button type="submit" color="primary" mat-button>
+                  Submit Response
+                </button>
+              </div>
+          </form>
+      </div>
+</div>

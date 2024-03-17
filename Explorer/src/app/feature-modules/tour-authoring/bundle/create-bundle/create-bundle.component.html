@@ -1,0 +1,64 @@
+<div id="tourReview-details">
+    <div style="display: flex;">
+        <div>
+            <h2>All tours</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tour of tours">
+                        <td>{{tour.name}}</td>
+                        <td>{{tour.price}}</td>
+                        <th>
+                            <button class="btn btn-primary" (click)="addTour(tour)">Add</button>
+                        </th>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="padding-left: 20rem;">
+            <h2>Bundle tours</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tour of toursForBundle">
+                        <td>{{tour.name}}</td>
+                        <td>{{tour.price}}</td>
+                        <th>
+                            <button class="btn btn-danger" (click)="removeTour(tour)">Remove</button>
+                        </th>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr>Price: {{price}}</tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="padding-left: 20rem;">
+            <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input type="text" name="inputNameTour" id="inputNameTour" class="form-control" [(ngModel)]="bundle.name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price:</label>
+                <input type="number" name="inputDescriptionTour" id="inputDescriptionTour" class="form-control" [(ngModel)]="bundle.price">
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="create()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

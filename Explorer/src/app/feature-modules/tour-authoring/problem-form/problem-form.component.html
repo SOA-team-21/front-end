@@ -1,0 +1,159 @@
+<div id="tours">
+
+    <h1 class="mt-5 text-center">All tours</h1>
+
+    <div class="container my-5">
+        <div class="input-group d-flex align-items-center justify-content-center">
+            <span class="input-group-text">Name:</span>
+            <button type="button" class="btn btn-outline-secondary" id="nameToggle" (click)="toggleSortDirection()">
+                <i *ngIf="sortDirection == undefined" class="bi bi-arrow-down-up"></i>
+                <i *ngIf="sortDirection != undefined && sortDirection" class="bi bi-arrow-down"></i>
+                <i *ngIf="sortDirection != undefined && !sortDirection" class="bi bi-arrow-up"></i>
+            </button>
+
+
+            <span class="input-group-text">Price:</span>
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">{{selectedPrice == undefined ? "Select..." : ((selectedPrice == 0 ? "Over $200" :
+                "Under: $" + selectedPrice))}}</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="setPriceFilter(100)">Low (under $100)</a></li>
+                <li><a class="dropdown-item" (click)="setPriceFilter(200)">Medium (under $200)</a></li>
+                <li><a class="dropdown-item" (click)="setPriceFilter(0)">High (over $200)</a></li>
+            </ul>
+
+            <span class="input-group-text">Rating:</span>
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <ng-container *ngIf="selectedRating == undefined">
+                    Select...
+                </ng-container>
+                <span *ngIf="selectedRating == 1">
+                    <i class="bi bi-star"></i>
+                </span>
+                <span *ngIf="selectedRating == 2">
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                </span>
+                <span *ngIf="selectedRating == 3">
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                </span>
+                <span *ngIf="selectedRating == 4">
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                </span>
+                <span *ngIf="selectedRating == 5">
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                    <i class="bi bi-star"></i>
+                </span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="setRatingFilter(1)"><i class="bi bi-star"></i></a></li>
+                <li><a class="dropdown-item" (click)="setRatingFilter(2)"><i class="bi bi-star"></i><i
+                            class="bi bi-star"></i></a></li>
+                <li><a class="dropdown-item" (click)="setRatingFilter(3)"><i class="bi bi-star"></i><i
+                            class="bi bi-star"></i><i class="bi bi-star"></i></a></li>
+                <li><a class="dropdown-item" (click)="setRatingFilter(4)"><i class="bi bi-star"></i><i
+                            class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i></a></li>
+                <li><a class="dropdown-item" (click)="setRatingFilter(5)"><i class="bi bi-star"></i><i
+                            class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i
+                            class="bi bi-star"></i></a></li>
+            </ul>
+
+            <span class="input-group-text">Difficulty:</span>
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">{{selectedDifficulty == undefined ? "Select..." : selectedDifficulty}}</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="setDifficultyFilter(1)">1</a></li>
+                <li><a class="dropdown-item" (click)="setDifficultyFilter(2)">2</a></li>
+                <li><a class="dropdown-item" (click)="setDifficultyFilter(3)">3</a></li>
+                <li><a class="dropdown-item" (click)="setDifficultyFilter(4)">4</a></li>
+                <li><a class="dropdown-item" (click)="setDifficultyFilter(5)">5</a></li>
+            </ul>
+
+            <button type="button" class="btn btn-outline-primary" (click)="applyFilters()">Filter</button>
+
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="removeFilters()"><i
+                    class="bi bi-x-lg"></i></button>
+        </div>
+
+    </div>
+
+    <div id="tours-details" class="div-tour-details d-flex align-items-center justify-content-center">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Difficult</th>
+                        <th>Price</th>
+                        <th>Average rating</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tour of tours">
+                        <td>{{tour.name}}</td>
+                        <td>{{tour.description}}</td>
+                        <td>{{tour.status}}</td>
+                        <td>{{tour.difficult}}</td>
+                        <td>{{tour.price}}</td>
+                        <td>{{tour.id !== undefined ? (averageRatings[tour.id] !== undefined ? averageRatings[tour.id] :
+                            "No reviews") : "No reviews"}}</td>
+
+
+                        <td class="button-td">
+                            <button color="primary" (click)="onProblemClicked(tour)" mat-icon-button>
+                                <mat-icon>error</mat-icon>
+                            </button>
+                            <button color="primary" class="mx-2" [routerLink]="['../show-tour/' + tour.id]">
+                                Show tour
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div *ngIf="shouldRenderProblemForm">
+                <div class="problem-header">
+                    <p>Report a Problem</p>
+                </div>
+                <form [formGroup]="problemForm">
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Category</mat-label>
+                            <input matInput formControlName="category" type="text" />
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-checkbox formControlName="priority">High Priority</mat-checkbox>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Description</mat-label>
+                            <input matInput formControlName="description" type="text" />
+                        </mat-form-field>
+                    </div>
+                    <div>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" (click)="addProblem()">Submit Problem</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

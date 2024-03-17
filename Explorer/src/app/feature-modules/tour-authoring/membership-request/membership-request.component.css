@@ -1,0 +1,81 @@
+/* Styles for the outer container with class "horizontal" */
+.horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Styles for the table container with id "membership-requests-details" */
+  #membership-requests-details {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+  }
+  
+  /* Styles for the table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+  
+  /* Styles for the table header (th) cells */
+  th {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  /* Styles for the table rows (tr) */
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  /* Styles for the table cells (td) */
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Add hover effect for rows */
+  tr:hover {
+    background-color: #ddd;
+  }
+  
+  /* Styles for the "Accept" and "Reject" buttons */
+  button {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Styles for the "Accept" button with tamnoplava background */
+  button.accept {
+    background-color: #08519a;
+    color: #fff;
+  }
+  
+  /* Styles for the "Reject" button with roza background */
+  button.reject {
+    background-color: #FF6B6B;
+    color: #fff;
+  }
+  
+  /* Adjust spacing and margins for the buttons */
+  button {
+    margin-right: 10px;
+  }
+  
+  /* Hover effect for buttons */
+  button:hover {
+    filter: brightness(1.2);
+  }
+  

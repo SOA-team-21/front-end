@@ -1,0 +1,15 @@
+<div class="header-container">
+    <h1 class="header">Purchased tours</h1>
+</div>
+<div class="search-results-container">
+    <div class="search-results-grid">
+        <div class="search-result" *ngFor="let token of tokens">
+            <div class="box" [routerLink]="['../show-tour/' + token.tourId]">
+                <img class="image" [src]="token.tourImage"
+                    alt="TURA">
+                <span class="title-box">{{token.tourName}}</span>
+                <span>Purchased on: {{token.purchaseTime | date: 'medium'}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1 class="text-center">Create a blog:</h1>
+            <form [formGroup]="blogForm">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input class="form-control" formControlName="title" type="text" [readonly]="tour != null">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea
+                        class="form-control"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="3"
+                        formControlName="description"
+                        cdkAutosizeMaxRows="6"
+                        [readonly]="tour != null"></textarea>
+                </div>
+                <div class="form-group" *ngIf="tour != null">
+                    <label>Additional Description:</label>
+                    <textarea
+                        class="form-control"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="3"
+                        formControlName="additionalDescription"
+                        cdkAutosizeMaxRows="6">
+                    </textarea>
+                </div>
+            </form>
+            <div class="form-group mb-3">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <label>Image URL:</label>
+                        <input name="imageUrl" [(ngModel)]="imageUrl" type="text" class="form-control">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" (click)="addImage()">Add image</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-success" (click)="addBlog()">Create blog</button>
+            </div>
+            <div *ngIf="blogForm.invalid" class="alert alert-danger mt-3">
+                <label>You must enter title and description to create a blog!</label>
+            </div>
+            <div *ngIf="blogCreated" class="alert alert-success mt-3">
+                <label>Blog successfully created!</label>
+            </div>
+        </div>
+    </div>
+</div>
