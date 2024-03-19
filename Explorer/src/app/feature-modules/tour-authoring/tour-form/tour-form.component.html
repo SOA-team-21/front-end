@@ -3,17 +3,17 @@
         <div class="col-6">
             <div class="mb-3">
                 <label for="inputNameTour" class="form-label">Name:</label>
-                <input type="text" name="inputNameTour" id="inputNameTour" class="form-control" [(ngModel)]="tour.name">
+                <input type="text" name="inputNameTour" id="inputNameTour" class="form-control" [(ngModel)]="tour.Name">
             </div>
             <div class="mb-3">
                 <label for="inputDescriptionTour" class="form-label">Description:</label>
-                <input type="text" name="inputDescriptionTour" id="inputDescriptionTour" class="form-control" [(ngModel)]="tour.description">
+                <input type="text" name="inputDescriptionTour" id="inputDescriptionTour" class="form-control" [(ngModel)]="tour.Description">
             </div>
         </div>
         <div class="col-6">
             <div class="mb-3">
                 <label for="inputDifficultyTour" class="form-label">Difficulty:</label>
-                <input type="number" min="0" max="10" name="inputDifficultyTour" id="inputDifficultyTour" class="form-control" [(ngModel)]="tour.difficult">
+                <input type="number" min="0" max="10" name="inputDifficultyTour" id="inputDifficultyTour" class="form-control" [(ngModel)]="tour.Difficult">
             </div>
             <div class="mb-3">
                 <label for="inputTagsTour" class="form-label" class="form-label">Tags:</label>
@@ -34,8 +34,8 @@
             <label class="form-label">Checkpoints:</label>
             <ul class="list-group">
                 <li class="list-group-item"> <!-- ngFor goes here -->
-                    <div *ngFor="let point of tour.points" class="d-flex justify-content-between">
-                        <p class="justify-content-start">{{point.name}}</p>
+                    <div *ngFor="let point of tour.KeyPoints" class="d-flex justify-content-between">
+                        <p class="justify-content-start">{{point.Name}}</p>
                         <div>
                             <button class="btn btn-outline-danger" (click)="removePoint(point)">Remove</button>
                         </div>
@@ -45,11 +45,11 @@
             </ul>
             <div>
                 <label for="inputForPointName" class="form-label">Point name: </label>
-                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.name">
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.Name">
                 <label for="inputForPointName" class="form-label">Point description: </label>
-                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.description">
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.Description">
                 <label for="inputForPointName" class="form-label">Point picture: </label>
-                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.picture">
+                <input type="text" name="inputForPointName" id="inputForPointName" class="form-control" [(ngModel)]="pointForAdd.Picture">
                 <button class="btn btn-outline-primary mt-3 me-3" (click)="addCheckpoint()">Add Checkpoint</button>
             </div>
         </div>
@@ -68,11 +68,11 @@
             <div class="row">
                 <div class="col-6">
                     <label for="inputRequiredTimeTour" class="form-label">Required time (minutes):</label>
-                    <input type="number" name="inputRequiredTimeTour" id="inputRequiredTimeTour" class="form-control" [(ngModel)]="requiredTime.minutes" disabled>
+                    <input type="number" name="inputRequiredTimeTour" id="inputRequiredTimeTour" class="form-control" [(ngModel)]="requiredTime.Minutes" disabled>
                 </div>
                 <div class="col-6">
                     <label for="inputLengthTour" class="form-label">Transport type:</label>
-                    <select class="form-select" [(ngModel)]="requiredTime.transportType" (change)="changeTransportType()">
+                    <select class="form-select" [(ngModel)]="requiredTime.TransportType" (change)="changeTransportType()">
                         <option selected>Select one</option>
                         <option value="TransportType.Walking">Walking</option>
                         <option value="TransportType.Bicycle">Bicycle</option>
@@ -84,7 +84,7 @@
         <div class="row">
             <div class="col-6">
                 <label class="form-label">Price:</label>
-                <input type="number" min="0" class="form-control" [(ngModel)]="tour.price">
+                <input type="number" min="0" class="form-control" [(ngModel)]="tour.Price">
             </div>
         </div>
     </div>

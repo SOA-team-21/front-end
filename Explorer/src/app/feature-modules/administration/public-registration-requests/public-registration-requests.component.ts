@@ -6,7 +6,7 @@ import { PublicRegistrationRequest } from '../model/public-registration-request.
 import { FormControl, FormGroup } from '@angular/forms';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { UserNotification } from 'src/app/infrastructure/auth/model/user.model';
-import { Tour } from '../../tour-authoring/model/tour.model';
+import { GoTour, Tour } from '../../tour-authoring/model/tour.model';
 
 @Component({
   selector: 'public-registration-requests',
@@ -66,9 +66,9 @@ export class PublicRegistrationRequestsComponent implements OnInit {
       }
       console.log(notification);
 
-      var tour: Tour;
+      var tour: GoTour;
       this.tourService.getTourById(foundRequest?.tourId).subscribe({
-        next: (result: Tour) => {
+        next: (result: GoTour) => {
           tour = result;
           this.service.notifyUser(tour.authorId, notification).subscribe((result: any) => {
             console.log(result);
@@ -109,9 +109,9 @@ export class PublicRegistrationRequestsComponent implements OnInit {
         message: 'Your request for publishing point has been approved.',
       }
 
-      var tour: Tour;
+      var tour: GoTour;
       this.tourService.getTourById(foundRequest?.tourId).subscribe({
-        next: (result: Tour) => {
+        next: (result: GoTour) => {
           tour = result;
           this.service.notifyUser(tour.authorId, notification).subscribe((result: any) => {
             console.log(result);

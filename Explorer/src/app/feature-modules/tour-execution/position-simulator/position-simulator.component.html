@@ -1,17 +1,13 @@
 
 <div class="container mt-4">
   <div class="row">
-    <h1 class="text-center"><b>{{tour.name}}</b></h1>
+    <h1 class="text-center"><b>{{tour.Name}}</b></h1>
   </div>
   <div class="row justify-content-center ">
     <div class="col-6">
       <form [formGroup]="positionForm">
         <div class="row mt-3">
-          <xp-map  
-          [points]="points" 
-          [socialEncounters]="socialEncounters" 
-          [hiddenEncounters]="hiddenEncounters"
-          [miscEncounters]="miscEncounters"
+          <xp-map  [points]="points" [socialEncounters]="socialEncounters" [hiddenEncounters]="hiddenEncounters" [miscEncounters]="miscEncounters"
           (markerClicked)="handleMarkerClick($event)"
           (yellowMarkerClicked)="handleYellowMarkerClick($event)"
           (blackMarkerClicked)="handleBlackMarkerClick($event)"
@@ -37,17 +33,17 @@
               <button (click)="returnToHomePage()" class="btn btn-success">Return to home page</button>
             </div>
             <div class="row mt-3 ml-5 mr-5">
-              <button *ngIf="tour && !tour.myOwn" (click)="showReviewForm()" class="button" class="btn btn-secondary">Add review</button>
+              <button *ngIf="tour && !tour.MyOwn" (click)="showReviewForm()" class="button" class="btn btn-secondary">Add review</button>
             </div>
             <div class="row mt-3">
               <button  (click)="showBlogForm()" class="button" class="btn btn-secondary">Create blog</button>
             </div>
             <div class="row mt-3 justify-content-center">
               <div class="col-6">
-                <xp-tour-review-form *ngIf="isShowReviewFormEnabled" [tour]="tour"></xp-tour-review-form>
+                <!-- <xp-tour-review-form *ngIf="isShowReviewFormEnabled" [tour]="tour"></xp-tour-review-form> -->
               </div>
             </div>       
-            <xp-blog-form *ngIf="isCreateBlogFormEnabled" [tour]="tour"></xp-blog-form>
+            <!-- <xp-blog-form *ngIf="isCreateBlogFormEnabled" [tour]="tour"></xp-blog-form> -->
           </div>
         </div>
         <div *ngIf="showMap" class="row mt-3 ">
@@ -233,8 +229,4 @@
       </div>
     </div>
   </div>
-
 </div>
-
-
-

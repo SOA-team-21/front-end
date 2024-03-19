@@ -3,8 +3,7 @@ import { MapService } from './map.service';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { environment } from 'src/env/environment';
-import { Point } from 'src/app/feature-modules/tour-authoring/model/points.model';
-import { Encounter } from 'src/app/feature-modules/encounter/model/encounter.model';
+import { GoPoint} from 'src/app/feature-modules/tour-authoring/model/points.model';
 import { HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
 import { SocialEncounter } from 'src/app/feature-modules/encounter/model/socialEncounter.model';
 import { MiscEncounter } from 'src/app/feature-modules/encounter/model/misc-encounter.model';
@@ -22,7 +21,7 @@ export class MapComponent implements AfterViewInit {
   endingAddress: string = '';
   @Output() longitude: EventEmitter<number> = new EventEmitter<number>();
   @Output() latitude: EventEmitter<number> = new EventEmitter<number>();
-  @Input() points: Point[] = [];
+  @Input() points: GoPoint[] = [];
 
   @Output() markerClicked: EventEmitter<SocialEncounter> = new EventEmitter<SocialEncounter>();
   @Input() socialEncounters: SocialEncounter[] = [];
@@ -61,7 +60,7 @@ export class MapComponent implements AfterViewInit {
         iconAnchor: [13, 41],
       });
 
-      const marker = new L.Marker([point.latitude, point.longitude], { icon: redIcon }).addTo(this.map);
+      const marker = new L.Marker([point.Latitude, point.Longitude], { icon: redIcon }).addTo(this.map);
       this.markers.push(marker);
     }); 
     

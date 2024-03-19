@@ -1,19 +1,17 @@
 import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { TourExecutionService } from "../tour-execution.service";
-import { Position } from "../model/position.model";
-import { Point } from '../../tour-authoring/model/points.model';
-import { TourExecution } from '../model/tour-lifecycle.model';
-import { Tour } from '../../tour-authoring/model/tour.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PointTask } from '../model/point-task.model';
+import { GoPoint, Point } from '../../tour-authoring/model/points.model';
+import { GoToken, GoTourExecution , GoPointTask, GoPosition} from '../model/tour-lifecycle.model';
+import { GoTour } from '../../tour-authoring/model/tour.model';
+import { Router } from '@angular/router';
 import { SocialEncounter } from '../../encounter/model/socialEncounter.model';
 import { HiddenEncounter } from '../../encounter/model/hidden-encounter.model';
 import { EncounterService } from '../../encounter/encounter.service';
-import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { ParticipantLocation } from '../../encounter/model/participant-location.model';
 import { Encounter } from '../../encounter/model/encounter.model';
 import { MiscEncounter } from '../../encounter/model/misc-encounter.model';
+import { TourAuthoringService } from '../../tour-authoring/tour-authoring.service';
 
 @Component({
   selector: 'xp-tour-execution-lifecycle',
@@ -21,9 +19,16 @@ import { MiscEncounter } from '../../encounter/model/misc-encounter.model';
   styleUrls: ['./position-simulator.component.css']
 })
 export class PositionSimulatorComponent implements OnInit {
+  
+  private goToken : GoToken;
+  tourExecution: GoTourExecution
+  doneTasks: GoPointTask[]
+  updatedExecution: GoTourExecution
+  tour: GoTour
+  partLocation: ParticipantLocation
+  
   isShowReviewFormEnabled: boolean = false;
   isCreateBlogFormEnabled: boolean = false;
-
   showReviewForm() {
     this.isShowReviewFormEnabled = !this.isShowReviewFormEnabled;
   }
@@ -31,11 +36,6 @@ export class PositionSimulatorComponent implements OnInit {
   showBlogForm() {
     this.isCreateBlogFormEnabled = !this.isShowReviewFormEnabled;
   }
-
-  tourExecution: TourExecution
-  updatedExecution: TourExecution
-  tour: Tour
-  doneTasks: PointTask[]
 
   hiddenEncounters: any[] = []
   socialEncounters: any[] = []
@@ -61,10 +61,11 @@ export class PositionSimulatorComponent implements OnInit {
       "longitude": 0
     }
   }
-  partLocation: ParticipantLocation
+
   showMap: boolean = true;
   showMessage: boolean = false;
-  showDiv: boolean = false
+  showDiv: boolean = false;
+
   clickedBlackMarker: boolean = false
   canActivateHiddenEncounter: boolean = true
   canSolveHiddenEncounter: boolean = false
@@ -143,42 +144,102 @@ export class PositionSimulatorComponent implements OnInit {
     "completers": [],
   };
 
-  @Output() points: Point[] = []
+  @Output() points: GoPoint[] = []
 
   positionForm = new FormGroup({
     longitude: new FormControl(-1, [Validators.required]),
     latitude: new FormControl(-1, [Validators.required])
   })
 
-  constructor(private service: TourExecutionService, private encounterService: EncounterService, private router: Router, private route: ActivatedRoute) {
+  constructor(private service: TourExecutionService, private encounterService: EncounterService, private tourService: TourAuthoringService, private router: Router) {
   }
 
   ngOnInit(): void {
-    const isReloaded = sessionStorage.getItem('isReloaded');
-    if (!isReloaded) {
-      sessionStorage.setItem('isReloaded', 'true');
-      window.location.reload();
-    } else {
-      sessionStorage.removeItem('isReloaded');
-    }    
-    
-    this.getSocialEncounters(); 
-    this.getHiddenEncounters();
-    this.getMiscEncounters();
-    this.tour = history.state.tour;
-    console.log('Received tour:', this.tour);
-    this.points = this.tour.points
 
-    this.service.startExecution(this.tour).subscribe({
-      next: (result: TourExecution) => {
+    this.goToken = history.state.token;
+    this.service.startExecution(this.goToken).subscribe({
+      next: (result: GoTourExecution) => {
+        console.log('Result: ', result)
         this.tourExecution = result;
+        this.tourService.getTourById(this.goToken.tourId).subscribe({
+          next: (response: GoTour) => {
+            console.log('Received Tour: ', response);
+            this.tour = response;
+            this.points = this.tour.KeyPoints;
+          }
+        })
       },
       error: (error) => {
         console.error('Error starting execution:', error);
       }
     });
+
+    this.getSocialEncounters(); 
+    this.getHiddenEncounters();
+    this.getMiscEncounters();
   }
- 
+
+
+  // TOUR EXECUTION
+  GetLatitude(latitude: number) {
+    console.log(latitude);
+    this.positionForm.get('latitude')?.patchValue(latitude);
+  }
+  GetLongitude(longitude: number) {
+    console.log(longitude);
+    this.positionForm.get('longitude')?.patchValue(longitude);
+
+  }
+
+  confirmPosition() {
+    const position: GoPosition = {
+      Longitude: Number(this.positionForm.value.longitude),
+      Latitude: Number(this.positionForm.value.latitude),
+      LastActivity: new Date(Date.now())
+    }
+
+    this.service.updatePosition(this.tourExecution.id, position).subscribe({
+      next: (result: GoTourExecution) => {
+        this.updatedExecution = result
+        this.doneTasks = this.getCompletedPoints(this.updatedExecution)
+        this.completeTour()
+      }
+    })
+  }
+
+  completeTour(){
+      if(this.doneTasks.length == this.tour.KeyPoints.length){
+        this.showMap = false;          
+        this.showMessage = true;
+      }
+  }
+
+  getCompletedPoints(tourExecution: GoTourExecution): GoPointTask[] {
+    if (tourExecution.Tasks) {
+      return tourExecution.Tasks.filter((pointTask) => pointTask.Done === true);
+    } else
+      return [];
+  }
+
+  quitTour() {
+    this.service.exitTour(this.tourExecution).subscribe({
+      next: (result: GoTourExecution) => {
+        console.log(result)
+      }
+    })
+    this.showMessage = true
+    this.showMap = false
+  }
+
+  returnToHomePage() {
+    this.router.navigate(['/']);
+  }
+
+  hideDiv() {
+    this.showDiv = false;
+  }
+
+  // ENCOUNTERS
   handleMarkerClick(encounter: SocialEncounter) {
     console.log('Marker clicked:', encounter);
     this.encounterModal = encounter;
@@ -235,45 +296,37 @@ export class PositionSimulatorComponent implements OnInit {
 
     this.clickedMarker = false;
   }
-
-
   hiddenEncounterButton() {
     this.clickedBlackMarker = false;
   }
-
   miscEncounterButton() {
     if(this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)){
       this.canSolve = false
       this.canActivate = false     
     }
-
     if(this.solvedMiscEncounters.some(encounter => encounter.id === this.miscModal.id)
        ||
-   this.miscModal.completers?.some(participant => participant.username === this.service.user.value.username))
-        this.canSolve = false;
+       this.miscModal.completers?.some(participant => participant.username === this.service.user.value.username))
+          this.canSolve = false;
     else
-        this.canSolve = true;
+          this.canSolve = true;
 
     if(!this.miscModal.participants?.some(participant => participant.username === this.service.user.value.username)
-    && !this.miscModal.completers?.some(participant => participant.username === this.service.user.value.username) &&
-    !this.activatedMiscEncounters.some(encounter => encounter.id === this.miscModal.id))
-        this.canActivate = true;
+      && !this.miscModal.completers?.some(participant => participant.username === this.service.user.value.username) &&
+      !this.activatedMiscEncounters.some(encounter => encounter.id === this.miscModal.id))
+          this.canActivate = true;
     else
-        this.canActivate = false;
-
+          this.canActivate = false;
     if(this.canActivate)
-      this.canSolve = false
-
-    this.clickedYellowMarker = false;
+        this.canSolve = false
+      this.clickedYellowMarker = false;
   }
-
-
   activateSocialEncounter(){
     if(this.encounterModal.name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
                   }
       this.encounterService.activateSocialEncounter(this.encounterModal.id, this.partLocation).subscribe({
         next: (result: Encounter) => {
@@ -294,8 +347,8 @@ export class PositionSimulatorComponent implements OnInit {
     if(this.encounterModal.name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
                   }
       this.encounterService.solveSocialEncounter(this.encounterModal.id, this.partLocation).subscribe({
         next: (result: SocialEncounter) => {
@@ -321,8 +374,8 @@ export class PositionSimulatorComponent implements OnInit {
       this.partLocation =
       {
         "username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
       }
 
       this.encounterService.activateHiddenEncounter(this.selectedHiddenEncounter.id, this.partLocation).subscribe({
@@ -344,8 +397,8 @@ export class PositionSimulatorComponent implements OnInit {
       this.partLocation =
       {
         "username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
       }
       this.encounterService.solveHiddenEncounter(this.selectedHiddenEncounter.id, this.partLocation).subscribe({
         next: (result: HiddenEncounter) => {
@@ -363,8 +416,8 @@ export class PositionSimulatorComponent implements OnInit {
     if(this.miscModal.name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
                   }
       this.encounterService.activateMiscEncounter(this.miscModal.id, this.partLocation).subscribe({
         next: (result: Encounter) => {
@@ -385,8 +438,8 @@ export class PositionSimulatorComponent implements OnInit {
     if(this.miscModal.name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
-        "latitude": this.updatedExecution.position.latitude,
-        "longitude": this.updatedExecution.position.longitude,
+        "latitude": this.updatedExecution.Position.Latitude,
+        "longitude": this.updatedExecution.Position.Longitude,
                   }
       this.encounterService.solveMiscEncounter(this.miscModal.id, this.partLocation).subscribe({
         next: (result: MiscEncounter) => {
@@ -404,95 +457,7 @@ export class PositionSimulatorComponent implements OnInit {
     } 
   }
 
-  GetLatitude(latitude: number) {
-    console.log(latitude);
-    this.positionForm.get('latitude')?.patchValue(latitude);
-  }
-
-
-  GetLongitude(longitude: number) {
-    console.log(longitude);
-    this.positionForm.get('longitude')?.patchValue(longitude);
-
-  }
-
-  confirmPosition() {
-    const position: Position = {
-      id: 1,
-      longitude: Number(this.positionForm.value.longitude),
-      latitude: Number(this.positionForm.value.latitude),
-      touristId: this.service.user.value.id,
-      lastActivity: new Date(Date.now())
-    }
-    
-
-    this.service.updatePosition(this.tourExecution.id, position).subscribe({
-      next: (result: TourExecution) => {
-        this.updatedExecution = result
-        this.setCurrentPosition()
-        this.doneTasks = this.getCompletedPoints(this.updatedExecution)
-        this.setLastPoint()
-        this.completeTour()
-      }
-    })
-  }
-
-    completeTour(){
-      if(this.isTourCompleted()){
-          this.showMessage = true;
-          this.showMap = false;          
-      }
-  }
-
-  isTourCompleted(): boolean {
-    return this.doneTasks.length == this.tour.points.length
-  }
-
-  setLastPoint() {
-    if (this.doneTasks.length > 0) {
-      if (this.isPointClose()) {
-        this.lastTaskPoint = this.doneTasks[this.doneTasks.length - 1].point;
-      } else
-        this.setCurrentPosition()
-    }
-  }
-
-  isPointClose(): boolean {
-    return (this.doneTasks[this.doneTasks.length - 1].point.latitude !== this.lastTaskPoint.latitude)
-      && (this.doneTasks[this.doneTasks.length - 1].point.longitude !== this.lastTaskPoint.longitude)
-  }
-
-  getCompletedPoints(tourExecution: TourExecution): PointTask[] {
-    if (tourExecution.tasks) {
-      return tourExecution.tasks.filter((pointTask) => pointTask.done === true);
-    } else
-      return [];
-  }
-
-  quitTour() {
-    this.service.exitTour(this.tourExecution).subscribe({
-      next: (result: TourExecution) => {
-        console.log(result)
-      }
-    })
-    this.showMessage = true
-    this.showMap = false
-  }
-
-  returnToHomePage() {
-    this.router.navigate(['/']);
-  }
-
-  hideDiv() {
-    this.showDiv = false;
-  }
-
-  setCurrentPosition() {
-    this.lastTaskPoint.name = 'Current position';
-    this.lastTaskPoint.description = `Longitude: ${this.updatedExecution.position.longitude}\nLatitude: ${this.updatedExecution.position.latitude}`;
-  }
-
-  getHiddenEncounters() {
+  private getHiddenEncounters() {
     this.encounterService.getHiddenEncounters().subscribe({
       next: (result: any[]) => {
         this.hiddenEncounters = result;
@@ -502,7 +467,7 @@ export class PositionSimulatorComponent implements OnInit {
     })
   }
 
-  getSocialEncounters() {
+  private getSocialEncounters() {
     this.encounterService.getAllSocialEncounters().subscribe({
       next: (result: any[]) => {
         this.socialEncounters = result;
@@ -512,7 +477,7 @@ export class PositionSimulatorComponent implements OnInit {
     })
   }
 
-  getMiscEncounters() {
+  private getMiscEncounters() {
     this.encounterService.getAllMiscEncounters().subscribe({
       next: (result: any[]) => {
         this.miscEncounters = result;
@@ -521,5 +486,4 @@ export class PositionSimulatorComponent implements OnInit {
       }
     })
   }
-
 }

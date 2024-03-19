@@ -1,9 +1,10 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { Tour } from '../model/tour.model';
-import { PagedResults } from 'src/app/shared/model/paged-results.model';
+import { GoTour } from '../model/tour.model';
 import { TourAuthoringService } from '../tour-authoring.service';
-import { Point } from '../model/points.model';
+import { GoPoint} from '../model/points.model';
 import { TourReview } from '../model/tourReview.model';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 
 @Component({
   selector: 'xp-tour',
@@ -12,35 +13,36 @@ import { TourReview } from '../model/tourReview.model';
 })
 export class TourComponent implements OnInit {
 
-  public tours: Tour[] = [];
-  @Output() points: Point[] = [];
+  public tours: GoTour[] = [];
+  @Output() points: GoPoint[] = [];
   @Output() reviews: TourReview[] = [];
-  selectedTour: Tour = {
+  selectedTour: GoTour = {
     id: 0,
-    name: '',
-    description: '',
-    difficult: 0,
-    tags: [],
-    status: 0,
-    price: 0,
+    Name: '',
+    Description: '',
+    Difficult: 0,
+    Tags: [],
+    Status: 0,
+    Price: 0,
     authorId: 0,
-    length: 0,
-    publishTime: '',
-    arhiveTime: '',
-    points: [],
-    requiredTimes: [],
-    reviews: [],
-    problems: [],
-    myOwn: false
+    Length: 0,
+    PublishTime: '',
+    ArchiveTime: '',
+    KeyPoints: [],
+    RequiredTimes: [],
+    MyOwn: false
   };
   shouldRenderTourForm: boolean = false;
   shouldEdit: boolean = false;
+  user : User;
 
-  constructor(private service: TourAuthoringService) { }
+  constructor(private authService: AuthService, private service: TourAuthoringService) { }
 
   ngOnInit(): void {
-    this.getTours();
-
+    this.authService.user$.subscribe(user => {
+      this.user = user;
+      this.getTours();
+    })
   }
 
   deleteTour(id: number): void {
@@ -52,16 +54,18 @@ export class TourComponent implements OnInit {
   }
 
   getTours(): void {
-    this.service.getTours().subscribe({
-      next: (result: PagedResults<Tour>) => {
-        this.tours = result.results;
+    this.service.getToursByAuthor(this.user.id).subscribe({
+      next: (result: GoTour[]) => {
+        this.tours = result;
+        console.log("These are tours: ", result)
       },
       error: () => {
+        console.log("Error getting tours by author!")
       }
     })
   }
 
-  onEditClicked(tour: Tour): void {
+  onEditClicked(tour: GoTour): void {
     this.selectedTour = tour;
     this.shouldRenderTourForm = true;
     this.shouldEdit = true;
@@ -74,35 +78,25 @@ export class TourComponent implements OnInit {
   onAddClicked(): void {
     this.selectedTour = {
       id: 0,
-      name: '',
-      description: '',
-      difficult: 0,
-      tags: [],
-      status: 0,
-      price: 0,
+      Name: '',
+      Description: '',
+      Difficult: 0,
+      Tags: [],
+      Status: 0,
+      Price: 0,
       authorId: 0,
-      length: 0,
-      publishTime: '',
-      arhiveTime: '',
-      points: [],
-      requiredTimes: [],
-      reviews: [],
-      problems: [],
-      myOwn: false
+      Length: 0,
+      PublishTime: '',
+      ArchiveTime: '',
+      KeyPoints: [],
+      RequiredTimes: [],
+      MyOwn: false
     };
     this.shouldEdit = false;
     this.shouldRenderTourForm = true;
   }
 
-  getTourPoints(id: number): void {
-    this.service.getPointsForTour(id).subscribe({
-      next: (result: Point[]) => {
-        this.points = result
-      }
-    })
-  }
-
-  arhive(id: number){
+  archive(id: number){
     this.service.arhiveTour(id).subscribe({
     })
   }

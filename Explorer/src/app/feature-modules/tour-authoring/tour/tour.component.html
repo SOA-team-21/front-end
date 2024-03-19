@@ -23,21 +23,21 @@
     <div class="row">
         <div class="col-md-4 mb-5" *ngFor="let tour of tours">
             <div class="card">
-                <img [src]="tour.points[0].picture" alt="Tour Image" class="card-img-top">
+                <img [src]="tour.KeyPoints != null ? tour.KeyPoints[0].Picture : ''" alt="Tour Image" class="card-img-top">
                 <div class="card-body">
-                    <h1 class="card-title">{{tour.name}}</h1>
-                    <p class="card-text mb-4">{{tour.description}}</p>
+                    <h1 class="card-title">{{tour.Name}}</h1>
+                    <p class="card-text mb-4">{{tour.Description}}</p>
                     <div class="card my-2 mb-3">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Difficulty: {{tour.difficult}}</li>
-                            <li class="list-group-item">Tags: {{tour.tags[0].Name}}</li>
-                            <li class="list-group-item">Length: {{tour.length}}</li>
-                            <li class="list-group-item">Price: {{tour.price}}</li>
+                            <li class="list-group-item">Difficulty: {{tour.Difficult}}</li>
+                            <!-- <li class="list-group-item">Tags: {{tour.tags[0]}}</li> -->
+                            <li class="list-group-item">Length: {{tour.Length}}</li>
+                            <li class="list-group-item">Price: {{tour.Price}}</li>
                         </ul>
                     </div>
                     <div class="d-flex align-items-center justify-content-between mt-4">
-                        <button class="btn btn-outline-warning" (click)="arhive(tour.id)" *ngIf="tour.status == 1">Archive tour</button>
-                        <button class="btn btn-outline-warning" (click)="publish(tour.id)" *ngIf="tour.status == 0">Publish tour</button>
+                        <!-- <button class="btn btn-outline-warning" (click)="archive(tour.id)" *ngIf="tour.status == 1">Archive tour</button> -->
+                        <!-- <button class="btn btn-outline-warning" (click)="publish(tour.id)" *ngIf="tour.status == 0">Publish tour</button> -->
                         <button class="btn btn-outline-secondary end-0" data-bs-toggle="modal" data-bs-target="#createTourModal" (click)="onEditClicked(tour)">Edit tour</button>
                     </div>
                 </div>

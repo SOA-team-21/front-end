@@ -1,6 +1,6 @@
-import { Point } from "../../tour-authoring/model/points.model"
+import { GoPoint, Point } from "../../tour-authoring/model/points.model"
 import { Problem } from "./problem.model";
-import { RequiredTime } from "./requiredTime.model";
+import { GoRequiredTime, RequiredTime } from "./requiredTime.model";
 import { TourReview } from "./tourReview.model";
 
 export interface Tour {
@@ -24,4 +24,21 @@ export interface Tour {
 
 export interface Tag{
     Name: string
+}
+
+export interface GoTour{
+    id: number,
+    Name: string,
+    Description: string,
+    Difficult: number,
+    Tags: string[],
+    Status: number,
+    Price: number,
+    KeyPoints: GoPoint[],
+    authorId: number
+    Length: number, 
+    PublishTime: string,
+    ArchiveTime: string,
+    RequiredTimes: GoRequiredTime[],
+    MyOwn?: boolean
 }
