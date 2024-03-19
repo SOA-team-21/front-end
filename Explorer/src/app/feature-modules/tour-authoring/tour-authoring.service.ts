@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/env/environment';
 import { Observable } from 'rxjs/internal/Observable';
-import { Tour } from './model/tour.model';
+import { GoTour, Tour } from './model/tour.model';
 import { Problem } from './model/problem.model';
 import {PagedResults} from "../../shared/model/paged-results.model";
 import {Point} from "./model/points.model";
@@ -45,6 +45,10 @@ export class TourAuthoringService {
     return this.http.get<PagedResults<Tour>>(environment.apiHost + 'author/tour/getAll');
   }
 
+  getToursByAuthor(authorId: number) : Observable<GoTour[]>{
+    return this.http.get<GoTour[]>(environment.apiHost + 'author/tour/getAllByAuthor/' + authorId)
+  }
+
   getTourById(id: number | undefined): Observable<Tour> {
     console.log(id);
     return this.http.get<Tour>(environment.apiHost + 'author/tour/getById/' + id);
@@ -54,13 +58,13 @@ export class TourAuthoringService {
     return this.http.delete<Tour>(environment.apiHost + 'author/tour/' + id);
   }
 
-  addTour(tour: Tour): Observable<Tour> {
+  addTour(tour: GoTour): Observable<GoTour> {
     console.log(tour);
-    return this.http.post<Tour>(environment.apiHost + 'author/tour', tour);
+    return this.http.post<GoTour>(environment.apiHost + 'author/tour', tour);
   }
 
-  updateTour(tour: Tour): Observable<Tour> {
-    return this.http.put<Tour>(environment.apiHost + 'author/tour/' + tour.id, tour);
+  updateTour(tour: GoTour): Observable<GoTour> {
+    return this.http.put<GoTour>(environment.apiHost + 'author/tour/update', tour);
   }
 
   addTourReview(tour:Tour,tourReview: TourReview): Observable<TourReview>{

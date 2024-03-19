@@ -47,22 +47,22 @@
                                 
                                 <div class="form-group">
                                     <label for="tourName">Name</label>
-                                    <input type="text" class="form-control" id="tourName" [(ngModel)]="tour.name" name="tourName" placeholder="Enter tour name" required>
+                                    <input type="text" class="form-control" id="tourName" [(ngModel)]="tour.Name" name="tourName" placeholder="Enter tour name" required>
                                 </div>
                                 
                                
                                 <div class="form-group">
                                     <label for="tourDescription">Description</label>
-                                    <textarea class="form-control" id="tourDescription" rows="3" [(ngModel)]="tour.description" name="tourDescription" placeholder="Describe the tour" required></textarea>
+                                    <textarea class="form-control" id="tourDescription" rows="3" [(ngModel)]="tour.Description" name="tourDescription" placeholder="Describe the tour" required></textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="tourRequiredTime" >Required time</label>
-                                    <input type="number" class="form-control" id="tourRequiredTime" [(ngModel)]="tour.requiredTimes[0].minutes" name="tourRequiredTime" placeholder="Enter required time in minutes" required>
+                                    <input type="number" class="form-control" id="tourRequiredTime" [(ngModel)]="tour.RequiredTimes[0].Minutes" name="tourRequiredTime" placeholder="Enter required time in minutes" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputLengthTour">Transport type:</label>
-                                    <select class="form-select" [(ngModel)]="tour.requiredTimes[0].transportType">
+                                    <select class="form-select" [(ngModel)]="tour.RequiredTimes[0].TransportType">
                                         
                                         <option value="TransportType.Walking">Walking</option>
                                         <option value="TransportType.Bicycle">Bicycle</option>
@@ -72,7 +72,7 @@
             
                                 <div class="form-group">
                                     <label for="tourDifficulty">Difficulty</label>
-                                    <input type="number" class="form-control" id="tourDifficulty" [(ngModel)]="tour.difficult" name="tourDifficulty"  placeholder="Enter tour difficulty" min="1" required>
+                                    <input type="number" class="form-control" id="tourDifficulty" [(ngModel)]="tour.Difficult" name="tourDifficulty"  placeholder="Enter tour difficulty" min="1" required>
                                 </div>
                                 
                                

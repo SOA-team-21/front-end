@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { TourAuthoringService } from '../tour-authoring.service';
 import { Point } from '../model/points.model';
-import { Tour } from '../model/tour.model';
+import { GoTour, Tour } from '../model/tour.model';
 import { OrderItem, OrderItemType } from '../../marketplace/model/order-item.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
@@ -18,23 +18,21 @@ export class PointsViewComponent implements OnInit {
   containsUnselectedPoints = true;
   selectedTour: Tour;
   isSelected: boolean = false;
-  tour: Tour = {
-    id:0,
-    name: '',
-    description: '',
-    difficult: 0,
-    tags: [],
-    status: 0,
-    price: 0,
+  tour: GoTour = {
+    id: 0,
+    Name: '',
+    Description: '',
+    Difficult: 0,
+    Tags: [],
+    Status: 0,
+    Price: 0,
     authorId: 0,
-    length: 0,
-    publishTime: '',
-    arhiveTime: '',
-    points: [],
-    requiredTimes: [],
-    reviews: [],
-    problems: [],
-    myOwn: false
+    Length: 0,
+    PublishTime: '',
+    ArchiveTime: '',
+    KeyPoints: [],
+    RequiredTimes: [],
+    MyOwn: false
   };
 
   user: User;
@@ -85,19 +83,9 @@ export class PointsViewComponent implements OnInit {
       }
 
       save() {
-        
-        this.tour.id=50;
-        this.tour.length = 2
-        this.tour.publishTime = new Date().toISOString();
-        this.tour.arhiveTime =new Date().toISOString();
-        this.tour.status = 1;
-        this.tour.myOwn = true;
-        this.tour.points=this.selectedPoints;
-        this.tour.authorId=this.user.id;
-        this.service.addTour(this.tour).subscribe({
-          next: () => { }
-        });
+        //TODO
       }
+      
 
       checkForUnselectedPoints(tour: Tour): boolean {
         const tourPoints = tour.points.map((point: Point) => point.name); 

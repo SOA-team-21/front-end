@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TourAuthoringService } from '../tour-authoring.service';
-import { Tour } from '../model/tour.model';
+import { GoTour} from '../model/tour.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { Point } from '../model/points.model';
+import { GoPoint } from '../model/points.model';
 import { MapRoutingService } from './map-routing.service';
-import { RequiredTime, TransportType } from '../model/requiredTime.model';
+import { GoRequiredTime, TransportType } from '../model/requiredTime.model';
 import * as L from 'leaflet';
 
 @Component({
@@ -20,7 +20,7 @@ export class TourFormComponent implements OnInit {
   readonly GREENCOLOR = "#00FF00"; //Walking
 
   @Output() tourUpdated = new EventEmitter<null>();
-  @Input({required: true}) tour: Tour;
+  @Input({required: true}) tour: GoTour;
   @Input() shouldEdit: boolean = false;
   
   private readonly pointIcon = L.icon({
@@ -41,21 +41,24 @@ export class TourFormComponent implements OnInit {
 
   tourTags: string = "";
   selectedTag: string = "";
-  pointForAdd: Point = {
-    longitude: 0,
-    latitude: 0,
-    public: false,
-    name: '',
-    description: '',
-    picture: ''
+  pointForAdd: GoPoint = {
+    id: 0,
+    tourId: 0,
+    Longitude: 0,
+    Latitude: 0,
+    Public: false,
+    Name: '',
+    Description: '',
+    Picture: ''
   };
   user: User;
-  requiredTime: RequiredTime = {
-    minutes: 0,
-    transportType: TransportType.Car
+  requiredTime: GoRequiredTime = {
+    id: 0,
+    tourId: 0,
+    Minutes: 0,
+    TransportType: TransportType.Car
   };
   tourLength: number = 0;
-
 
   constructor(private service: TourAuthoringService,
     private authService: AuthService,
@@ -73,19 +76,19 @@ export class TourFormComponent implements OnInit {
   }
 
   private initializeTourFields(){
-    this.tourLength = this.tour.length;
-    this.requiredTime = this.tour.requiredTimes[0];
+    this.tourLength = this.tour.Length;
+    this.requiredTime = this.tour.RequiredTimes[0];
     this.tourTags = "";
-    this.tour.tags.forEach(t =>  {
-      this.tourTags += "#" + t.Name  + " "
+    this.tour.Tags.forEach(t =>  {
+      this.tourTags += "#" + t  + " "
     });
   }
 
   private initializeMap() {
     let initialView = [0, 0];
-    if(this.tour.points.length > 1){
-      initialView[0] = this.tour.points[0].latitude;
-      initialView[1] = this.tour.points[0].longitude;
+    if(this.tour.KeyPoints != null && this.tour.KeyPoints.length > 1){
+      initialView[0] = this.tour.KeyPoints[0].Latitude;
+      initialView[1] = this.tour.KeyPoints[0].Longitude;
     }
     this.map = L.map('mapDiv').setView([initialView[0], initialView[1]], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -94,13 +97,13 @@ export class TourFormComponent implements OnInit {
     this.map.on('click', (event: any) => {
         this.setCurrentMarker(event);
     });
-    this.initializeKeyPoints(this.tour.points);
+    this.initializeKeyPoints(this.tour.KeyPoints);
   }
 
-  private initializeKeyPoints(points: Point[]){
-    if(points.length < 1) return;
-    points.forEach(point => {
-        this.markers.push(L.marker([point.latitude, point.longitude], {icon: this.pointIcon}).addTo(this.map));
+  private initializeKeyPoints(keypoints: GoPoint[]){
+    if(keypoints == null || keypoints.length < 1) return;
+    keypoints.forEach(point => {
+        this.markers.push(L.marker([point.Latitude, point.Longitude], {icon: this.pointIcon}).addTo(this.map));
     })
   }
 
@@ -113,12 +116,14 @@ export class TourFormComponent implements OnInit {
 
   private calculateRoute(): void{
     if (this.markers.length < 2) {
-      alert('Error! Not enough key points entered to display route.'); return;
+      alert('Error! Not enough key keypoints entered to display route.'); return;
     }
     this.mapService.calculateRoute(this.markers).subscribe({
       next: (routeInfo) => {
         this.tourLength = routeInfo.routeLength;
-        this.requiredTime.minutes =  Math.round(routeInfo.routeDuration / 60); //Initial value is in seconds, conversion to minutes required
+        this.requiredTime.Minutes =  Math.round(routeInfo.routeDuration / 60); //Initial value is in seconds, conversion to minutes required
+        this.tour.RequiredTimes[0].Minutes = this.requiredTime.Minutes;
+        this.tour.RequiredTimes[0].TransportType = this.requiredTime.TransportType;
         this.displayRoute(routeInfo.route);
       },
       error: (error) => {
@@ -135,8 +140,8 @@ export class TourFormComponent implements OnInit {
   }
 
   changeTransportType() {
-    this.changeRouteColor(this.requiredTime.transportType);
-    this.mapService.changeTransportationType(this.requiredTime.transportType);
+    this.changeRouteColor(this.requiredTime.TransportType);
+    this.mapService.changeTransportationType(this.requiredTime.TransportType);
     this.calculateRoute();
   }
   
@@ -150,18 +155,16 @@ export class TourFormComponent implements OnInit {
   }  
 
   addTag(tag: string) {
-    this.tour.tags.push({
-      Name: tag
-    });
+    this.tour.Tags.push(tag);
     this.tourTags = "";
-    this.tour.tags.forEach( t => {
-      this.tourTags += "#" +  t.Name + " "
+    this.tour.Tags.forEach( t => {
+      this.tourTags += "#" +  t + " "
     });
   }
 
-  removePoint(point: Point){
-    let index = this.tour.points.indexOf(point);
-    this.tour.points.splice(index, 1);
+  removePoint(point: GoPoint){
+    let index = this.tour.KeyPoints.indexOf(point);
+    this.tour.KeyPoints.splice(index, 1);
     
     let layerToRemove = this.markers.splice(index, 1); //Need to delete marker too, return value is array
     if (layerToRemove != undefined) {
@@ -171,44 +174,48 @@ export class TourFormComponent implements OnInit {
   }
 
   addCheckpoint(){
-    this.pointForAdd.latitude = this.currentMarker.getLatLng().lat;
-    this.pointForAdd.longitude = this.currentMarker.getLatLng().lng;
-    if(this.tour.points[-1] == this.pointForAdd){
+    this.pointForAdd.Latitude = this.currentMarker.getLatLng().lat;
+    this.pointForAdd.Longitude = this.currentMarker.getLatLng().lng;
+    this.pointForAdd.tourId = this.tour.id;
+    if(this.tour.KeyPoints == null){
+      this.tour.KeyPoints = []
+    }
+    if(this.tour.KeyPoints[-1] == this.pointForAdd){
       alert('Same last key point, please change!');return;
     }
-    this.tour.points.push(this.pointForAdd);
+    this.tour.KeyPoints.push(this.pointForAdd);
     this.markers.push(L.marker([this.currentMarker.getLatLng().lat, this.currentMarker.getLatLng().lng], {icon: this.pointIcon}).addTo(this.map));
 
     console.log('Marker added: ', this.currentMarker.getLatLng());
     this.calculateRoute();
-    this.pointForAdd =  
-    { longitude: 0,
-      latitude: 0,
-      public: false,
-      name: '',
-      description: '',
-      picture: ''
+    this.pointForAdd ={ 
+      id: 0,
+      tourId: 0,
+      Longitude: 0,
+      Latitude: 0,
+      Public: false,
+      Name: '',
+      Description: '',
+      Picture: ''
     }
   }
 
   private validateTourInput(): boolean{
-    if(this.tour.name === "" || this.tour.description === "") return false;
-    if(this.tour.difficult < 1) return false;
-    if(this.tour.length <= 0) return false;
-    if(this.tour.price < 0) return false;
-    if(this.tour.requiredTimes == undefined) return false;
+    if(this.tour.Name === "" || this.tour.Description === "") return false;
+    if(this.tour.Difficult < 1) return false;
+    if(this.tour.Price < 0) return false;
+    if(this.tour.RequiredTimes == undefined) return false;
     return true;
   }
 
   save() {
     if(!this.shouldEdit){
       this.tour.authorId = this.user.id
-      this.tour.requiredTimes.push(this.requiredTime);
-      this.tour.length = this.tourLength;
-      this.tour.publishTime = new Date().toISOString();
-      this.tour.arhiveTime =new Date().toISOString();
-      this.tour.status = 1;
-      this.tour.myOwn = false;
+      this.tour.Length = 0;
+      this.tour.PublishTime = '';
+      this.tour.ArchiveTime = '';
+      this.tour.Status = 1;
+      this.tour.MyOwn = false;
       if(!this.validateTourInput()){
         alert('Error! All fields must be entered!'); return;
       }
@@ -229,8 +236,8 @@ export class TourFormComponent implements OnInit {
       if(!this.validateTourInput()){
         alert('Error! All fields must be entered!'); return;
       }
-      if(this.tour.points.length < 2){
-        alert('Error! Must enter at least 2 key points!'); return;
+      if(this.tour.KeyPoints.length < 2){
+        alert('Error! Must enter at least 2 key keypoints!'); return;
       }
       console.log("Tour to update: ", this.tour);
       this.service.updateTour(this.tour).subscribe({
