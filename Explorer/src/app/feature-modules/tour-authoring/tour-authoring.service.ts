@@ -49,9 +49,8 @@ export class TourAuthoringService {
     return this.http.get<GoTour[]>(environment.apiHost + 'author/tour/getAllByAuthor/' + authorId)
   }
 
-  getTourById(id: number | undefined): Observable<Tour> {
-    console.log(id);
-    return this.http.get<Tour>(environment.apiHost + 'author/tour/getById/' + id);
+  getTourById(id: number | undefined): Observable<GoTour> {
+    return this.http.get<GoTour>(environment.apiHost + 'author/tour/getById/' + id);
   }
 
   deleteTour(id: number): Observable<Tour> {

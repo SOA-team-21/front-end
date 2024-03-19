@@ -1,19 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Tour } from '../../tour-authoring/model/tour.model';
+import { GoTour, Tour } from '../../tour-authoring/model/tour.model';
 import { Point } from '../../tour-authoring/model/points.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TourAuthoringService } from '../../tour-authoring/tour-authoring.service';
-import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { MarketplaceService } from '../marketplace.service';
 import { ShoppingCart } from '../model/shopping-cart.model';
 import { OrderItem } from '../model/order-item.model';
 import { EventType, ShoppingEvent } from '../model/shopping-event.model';
-import { TourReview } from '../../tour-authoring/model/tourReview.model';
 import { Problem } from '../../tour-authoring/model/problem.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { GoToken } from '../../tour-execution/model/tour-lifecycle.model';
 
 
 @Component({
@@ -25,10 +24,9 @@ export class ShowTourComponent {
 
   constructor(private marketService: MarketplaceService, private route: ActivatedRoute, private checkpointService: TourAuthoringService, private service: AuthService, private router: Router) { }
 
-  tour: Tour
+  tour: GoTour
 
   isPaid: boolean = true
-
   user: User;
   shoppingCart: ShoppingCart;
 
@@ -143,10 +141,10 @@ export class ShowTourComponent {
   private loadTourData() {
     if (this.currentTourId) {
       this.checkpointService.getTourById(this.currentTourId).subscribe({
-        next: (result: Tour) => {
+        next: (result: GoTour) => {
           this.tour = result;
           console.log(result);
-          this.images = this.getImagesFromPoints(this.tour.points)
+          this.images = this.getImagesFromPoints(this.tour.KeyPoints)
           console.log(this.images)
           this.currentPicture = this.images[this.currentImageIndex];
           this.checkpointService.getAverageRating(this.currentTourId).subscribe({
@@ -184,7 +182,11 @@ export class ShowTourComponent {
   }
 
   activateTour() {
-    this.router.navigate(['/tour-execution-lifecycle'], { state: { tour: this.tour } });
+    let goToken : GoToken = {
+      tourId: this.tour.id,
+      touristId: this.user.id
+    }
+    this.router.navigate(['/tour-execution-lifecycle'], { state: { token: goToken } });
   }
 
   getShoppingCart() {
@@ -207,9 +209,9 @@ export class ShowTourComponent {
     if (this.shoppingCart.items.findIndex((x: OrderItem) => x.idType === this.tour.id && x.type == "SingleTour") === -1) {
       const orderItem: OrderItem = {
         idType: this.tour.id,
-        name: this.tour.name,
-        price: this.tour.price,
-        image: this.tour.points[0].picture ?? 'No image',
+        name: this.tour.Name,
+        price: this.tour.Price,
+        image: this.tour.KeyPoints[0].Picture ?? 'No image',
         couponCode: this.couponCode,
         type: "SingleTour"
       };
@@ -243,34 +245,10 @@ export class ShowTourComponent {
   }
   
 
+  //TODO
   addReview(): void { 
-    const review: TourReview = {
-      rating: this.reviewForm.get('rating')?.value || 1,
-      comment: this.reviewForm.get('comment')?.value || '',
-      tourDate: this.formatDate(this.reviewForm.value.tourDate), 
-      images: this.reviewImages || [],
-      creationDate: new Date(),
-      tourId: this.tour.id || -1,
-      touristId: this.user?.id || -1,
-      touristUsername: this.user?.username || ''
-    };
-  
-    this.checkpointService.addTourReview(this.tour, review).subscribe({
-      next: () => { 
-        this.tour.reviews.push(review);
-        
-      },
-      error: (error) => {
-        console.error(error);
-        alert(error.error.detail || 'An unexpected error occurred.');
-      }
-    });
-    this.ngOnInit();
-
-  
-    console.log(review);
+    
   }
-
 
   encodeImages(selectedFiles: FileList) {
     for(let i = 0; i < selectedFiles.length; i++){
@@ -299,4 +277,3 @@ export class ShowTourComponent {
     this.shouldRenderProblemForm = false;
   }
 }
-

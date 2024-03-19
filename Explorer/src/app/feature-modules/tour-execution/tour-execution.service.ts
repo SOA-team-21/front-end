@@ -1,12 +1,11 @@
 import {Injectable, Input} from '@angular/core';
-import {Position} from "./model/position.model";
 import {Observable} from "rxjs/internal/Observable";
 import {environment} from "../../../env/environment";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../../infrastructure/auth/model/user.model";
 import {AuthService} from "../../infrastructure/auth/auth.service";
 import {BehaviorSubject} from "rxjs";
-import { TourExecution } from './model/tour-lifecycle.model';
+import { GoPosition, GoToken, GoTourExecution } from './model/tour-lifecycle.model';
 import { Tour } from '../tour-authoring/model/tour.model';
 import { TourPurchaseToken } from './model/tour-purchase-token.model';
 import {PagedResults} from "../../shared/model/paged-results.model";
@@ -44,17 +43,17 @@ export class TourExecutionService {
     this.user = authService.user$;
   }
 
-  startExecution(tour: Tour): Observable<TourExecution> {
-    const url = `${environment.apiHost}tourist/tourExecution/start-execution/${tour.id}`;
-    return this.http.post<TourExecution>(url, tour);
+  startExecution(token: GoToken): Observable<GoTourExecution> {
+    const url = `${environment.apiHost}tourist/tourExecution/start-execution`;
+    return this.http.post<GoTourExecution>(url, token);
   }
 
-  updatePosition(tourExecutionId: number, position: Position): Observable<TourExecution> {
-    return this.http.put<TourExecution>(environment.apiHost + 'tourist/tourExecution/update-position/' + tourExecutionId, position);
+  updatePosition(tourExecutionId: number, position: GoPosition): Observable<GoTourExecution> {
+    return this.http.put<GoTourExecution>(environment.apiHost + 'tourist/tourExecution/update-position/' + tourExecutionId, position);
   }
 
-  exitTour(tourExecution: TourExecution): Observable<TourExecution>{
-    return this.http.patch<TourExecution>(environment.apiHost + 'tourist/tourExecution/quit/' + tourExecution.id, tourExecution);
+  exitTour(tourExecution: GoTourExecution): Observable<GoTourExecution>{
+    return this.http.patch<GoTourExecution>(environment.apiHost + 'tourist/tourExecution/quit/' + tourExecution.id, tourExecution);
   }
 
   getTouristTokens(userId: number): Observable<TourPurchaseToken[]> {
@@ -62,7 +61,7 @@ export class TourExecutionService {
   }
 
 
-  getExecutions(): Observable<PagedResults<TourExecution>> {
-    return this.http.get<PagedResults<TourExecution>>(environment.apiHost + 'tourist/tourExecution/getAll');
+  getExecutions(): Observable<PagedResults<GoTourExecution>> {
+    return this.http.get<PagedResults<GoTourExecution>>(environment.apiHost + 'tourist/tourExecution/getAll');
   }
 }
