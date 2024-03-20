@@ -66,6 +66,14 @@ export class TourAuthoringService {
     return this.http.put<GoTour>(environment.apiHost + 'author/tour/update', tour);
   }
 
+  archiveTour(tour: GoTour): Observable<GoTour> {
+    return this.http.put<any>(environment.apiHost + 'author/tour/archiveTour', tour);
+  }
+
+  publishTour(tour: GoTour): Observable<GoTour> {
+    return this.http.put<any>(environment.apiHost + 'author/tour/publishTour', tour);
+  }
+
   addTourReview(tour:Tour,tourReview: TourReview): Observable<TourReview>{
     return this.http.post<TourReview>(environment.apiHost + 'author/tour/rateTour/'+ tour.id,tourReview);
   }
@@ -157,13 +165,7 @@ export class TourAuthoringService {
     return this.http.get<number>(environment.apiHost + 'author/tour/averageRating/' + tourId)
   }
 
-  arhiveTour(id: number): Observable<any> {
-    return this.http.get<any>(environment.apiHost + 'author/tour/arhiveTour/' + id);
-  }
-
-  publishTour(id: number): Observable<any> {
-    return this.http.get<any>(environment.apiHost + 'author/tour/publishTour/' + id);
-  }
+  
   
   getAllProblems(user: User): Observable<PagedResults<Problem>> {
     return this.http.get<PagedResults<Problem>>(environment.apiHost + 'author/problems/getAll/'+ user.id)

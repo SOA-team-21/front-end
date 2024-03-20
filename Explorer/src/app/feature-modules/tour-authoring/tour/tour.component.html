@@ -36,8 +36,8 @@
                         </ul>
                     </div>
                     <div class="d-flex align-items-center justify-content-between mt-4">
-                        <!-- <button class="btn btn-outline-warning" (click)="archive(tour.id)" *ngIf="tour.status == 1">Archive tour</button> -->
-                        <!-- <button class="btn btn-outline-warning" (click)="publish(tour.id)" *ngIf="tour.status == 0">Publish tour</button> -->
+                        <button class="btn btn-outline-warning" (click)="archiveTour(tour)" *ngIf="tour.Status == 1">Archive tour</button>
+                        <button class="btn btn-outline-warning" (click)="publishTour(tour)" *ngIf="tour.Status == 0">Publish tour</button>
                         <button class="btn btn-outline-secondary end-0" data-bs-toggle="modal" data-bs-target="#createTourModal" (click)="onEditClicked(tour)">Edit tour</button>
                     </div>
                 </div>

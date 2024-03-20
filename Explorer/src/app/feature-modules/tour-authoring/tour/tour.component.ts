@@ -26,7 +26,7 @@ export class TourComponent implements OnInit {
     Price: 0,
     authorId: 0,
     Length: 0,
-    PublishTime: '',
+    PublishTime: null,
     ArchiveTime: '',
     KeyPoints: [],
     RequiredTimes: [],
@@ -71,6 +71,36 @@ export class TourComponent implements OnInit {
     this.shouldEdit = true;
   }
 
+  publishTour(tour: GoTour): void {
+    this.selectedTour = tour;
+    this.service.publishTour(this.selectedTour).subscribe({
+      next: (response) => {
+        if(response != undefined){
+          alert("Tour published!");
+          this.getTours();
+        }
+      },
+      error: (err) => {
+        alert("Error! " + err);
+      }});
+
+  }
+
+  archiveTour(tour: GoTour): void {
+    this.selectedTour = tour;
+    this.service.archiveTour(this.selectedTour).subscribe({
+      next: (response) => {
+        if(response != undefined){
+          alert("Tour archived!");
+          this.getTours();
+        }
+      },
+      error: (err) => {
+        alert("Error! " + err);
+      }});
+
+  }
+
   closeModal() {
     this.shouldRenderTourForm = false;
   }
@@ -86,7 +116,7 @@ export class TourComponent implements OnInit {
       Price: 0,
       authorId: 0,
       Length: 0,
-      PublishTime: '',
+      PublishTime: null,
       ArchiveTime: '',
       KeyPoints: [],
       RequiredTimes: [],
@@ -96,13 +126,5 @@ export class TourComponent implements OnInit {
     this.shouldRenderTourForm = true;
   }
 
-  archive(id: number){
-    this.service.arhiveTour(id).subscribe({
-    })
-  }
 
-  publish(id: number){
-    this.service.publishTour(id).subscribe({
-    })
-  }
 }

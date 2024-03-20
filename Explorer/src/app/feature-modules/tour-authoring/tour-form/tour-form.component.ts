@@ -77,7 +77,18 @@ export class TourFormComponent implements OnInit {
 
   private initializeTourFields(){
     this.tourLength = this.tour.Length;
-    this.requiredTime = this.tour.RequiredTimes[0];
+    if(this.tour.RequiredTimes != null && this.tour.RequiredTimes.length > 0){
+      this.requiredTime = this.tour.RequiredTimes[0];
+    }
+    else {
+      this.requiredTime = {
+        id: 0,
+        tourId: this.tour.id,
+        Minutes: 0,
+        TransportType: TransportType.Car
+      }
+    }
+    
     this.tourTags = "";
     this.tour.Tags.forEach(t =>  {
       this.tourTags += "#" + t  + " "
@@ -212,9 +223,9 @@ export class TourFormComponent implements OnInit {
     if(!this.shouldEdit){
       this.tour.authorId = this.user.id
       this.tour.Length = 0;
-      this.tour.PublishTime = '';
-      this.tour.ArchiveTime = '';
-      this.tour.Status = 1;
+      this.tour.PublishTime = null;
+      this.tour.ArchiveTime = null;
+      this.tour.Status = 0;
       this.tour.MyOwn = false;
       if(!this.validateTourInput()){
         alert('Error! All fields must be entered!'); return;
