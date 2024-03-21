@@ -76,8 +76,18 @@ export class TourFormComponent implements OnInit {
   }
 
   private initializeTourFields(){
-    this.tourLength = this.tour.Length;
-    this.requiredTime = this.tour.RequiredTimes[0];
+    this.tourLength = this.tour.Length | 0;
+    if(this.tour.RequiredTimes != null && this.tour.RequiredTimes.length > 0){
+      this.requiredTime = this.tour.RequiredTimes[0];
+    } else {
+      this.tour.RequiredTimes = []
+      this.requiredTime = {
+        id : 0,
+        tourId : this.tour.id,
+        Minutes: 0,
+        TransportType: TransportType.Car        
+      }
+    }
     this.tourTags = "";
     this.tour.Tags.forEach(t =>  {
       this.tourTags += "#" + t  + " "
@@ -97,11 +107,11 @@ export class TourFormComponent implements OnInit {
     this.map.on('click', (event: any) => {
         this.setCurrentMarker(event);
     });
+    if(this.tour.KeyPoints == null || this.tour.KeyPoints.length < 1) return;
     this.initializeKeyPoints(this.tour.KeyPoints);
   }
 
   private initializeKeyPoints(keypoints: GoPoint[]){
-    if(keypoints == null || keypoints.length < 1) return;
     keypoints.forEach(point => {
         this.markers.push(L.marker([point.Latitude, point.Longitude], {icon: this.pointIcon}).addTo(this.map));
     })
@@ -114,7 +124,7 @@ export class TourFormComponent implements OnInit {
     this.currentMarker = L.marker([event.latlng.lat, event.latlng.lng], {icon: this.currentPointIcon}).addTo(this.map);
   }
 
-  private calculateRoute(): void{
+  private calculateRoute(): void {
     if (this.markers.length < 2) {
       alert('Error! Not enough key keypoints entered to display route.'); return;
     }
@@ -122,8 +132,6 @@ export class TourFormComponent implements OnInit {
       next: (routeInfo) => {
         this.tourLength = routeInfo.routeLength;
         this.requiredTime.Minutes =  Math.round(routeInfo.routeDuration / 60); //Initial value is in seconds, conversion to minutes required
-        this.tour.RequiredTimes[0].Minutes = this.requiredTime.Minutes;
-        this.tour.RequiredTimes[0].TransportType = this.requiredTime.TransportType;
         this.displayRoute(routeInfo.route);
       },
       error: (error) => {
@@ -204,20 +212,22 @@ export class TourFormComponent implements OnInit {
     if(this.tour.Name === "" || this.tour.Description === "") return false;
     if(this.tour.Difficult < 1) return false;
     if(this.tour.Price < 0) return false;
-    if(this.tour.RequiredTimes == undefined) return false;
+    if(this.tour.RequiredTimes == undefined || this.tour.RequiredTimes.length < 1) return false;
     return true;
   }
 
   save() {
     if(!this.shouldEdit){
       this.tour.authorId = this.user.id
+      this.tour.KeyPoints = []
+      this.tour.RequiredTimes = []
       this.tour.Length = 0;
-      this.tour.PublishTime = '';
-      this.tour.ArchiveTime = '';
-      this.tour.Status = 1;
+      this.tour.PublishTime = null;
+      this.tour.ArchiveTime = null;
+      this.tour.Status = 0;
       this.tour.MyOwn = false;
       if(!this.validateTourInput()){
-        alert('Error! All fields must be entered!'); return;
+        alert('Error! All fields must be valid!'); return;
       }
       console.log("Tour to create: ", this.tour);
       this.service.addTour(this.tour).subscribe({
@@ -231,10 +241,10 @@ export class TourFormComponent implements OnInit {
           alert("Error! " + err);
         }
       })
-    }
-    else{
+    } else {
+      this.tour.RequiredTimes.push(this.requiredTime)
       if(!this.validateTourInput()){
-        alert('Error! All fields must be entered!'); return;
+        alert('Error! All fields must be valid!'); return;
       }
       if(this.tour.KeyPoints.length < 2){
         alert('Error! Must enter at least 2 key keypoints!'); return;
