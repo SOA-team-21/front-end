@@ -29,7 +29,7 @@ export class PointsViewComponent implements OnInit {
     authorId: 0,
     Length: 0,
     PublishTime: null,
-    ArchiveTime: '',
+    ArchiveTime: null,
     KeyPoints: [],
     RequiredTimes: [],
     MyOwn: false

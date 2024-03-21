@@ -53,7 +53,7 @@ export class TourExecutionService {
   }
 
   exitTour(tourExecution: GoTourExecution): Observable<GoTourExecution>{
-    return this.http.patch<GoTourExecution>(environment.apiHost + 'tourist/tourExecution/quit/' + tourExecution.id, tourExecution);
+    return this.http.patch<GoTourExecution>(environment.apiHost + 'tourist/tourExecution/quit?tourExecutionId=' + tourExecution.id, {});
   }
 
   getTouristTokens(userId: number): Observable<TourPurchaseToken[]> {

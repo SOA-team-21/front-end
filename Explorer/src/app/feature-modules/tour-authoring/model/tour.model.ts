@@ -36,9 +36,9 @@ export interface GoTour{
     Price: number,
     KeyPoints: GoPoint[],
     authorId: number
-    Length: number, 
+    Length: number,
     PublishTime: Date | null,
-    ArchiveTime: string | null,
+    ArchiveTime: Date | null,
     RequiredTimes: GoRequiredTime[],
     MyOwn?: boolean
 }
