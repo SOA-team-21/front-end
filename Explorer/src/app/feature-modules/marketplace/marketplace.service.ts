@@ -37,11 +37,11 @@ export class MarketplaceService {
   }
 
   getAllTouristPreferences(touristId: number): Observable<Preference[]>{
-    return this.http.get<Preference[]>(environment.apiHost + 'personalization/preference/getAllForTourist/' + touristId);
+    return this.http.get<Preference[]>(environment.apiHost + 'personalization/preference/getAllByUserId/' + touristId);
   }
 
   updatePreference(updatedPreference: Preference): Observable<Preference> {
-    return this.http.put<Preference>(environment.apiHost + 'personalization/preference/' + updatedPreference.userId,
+    return this.http.put<Preference>(environment.apiHost + 'personalization/preference/update',
       updatedPreference);
   }
 

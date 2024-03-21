@@ -73,6 +73,54 @@
                     </div>
                 </div>
 
+                <!-- <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h2 class="modal-title fs-5" id="preferencesModalLabel">Preferences</h2>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+                            <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <div *ngFor="let pre of preferences" class="card mb-3">
+                                        <div class="card-body">
+                                            <p>Difficulty:
+                                                <span [ngSwitch]="pre.difficulty">
+                                                    <ng-container *ngSwitchCase="1">{{pre.difficulty}} - Easy</ng-container>
+                                                    <ng-container *ngSwitchCase="2">{{pre.difficulty}} - Moderate</ng-container>
+                                                    <ng-container *ngSwitchCase="3">{{pre.difficulty}} - Intermediate</ng-container>
+                                                    <ng-container *ngSwitchCase="4">{{pre.difficulty}} - Hard</ng-container>
+                                                    <ng-container *ngSwitchCase="5">{{pre.difficulty}} - Very Hard</ng-container>
+                                                </span>
+                                            </p>
+                                            <p>Transport: {{pre.transport}}</p>
+                                            <p>#{{pre.tags}}</p>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <button class="btn btn-primary" (click)="onEditClicked(pre)">Edit <i class="bi bi-pencil-fill"></i></button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-danger" (click)="deletePreference(pre.id || 0)">Delete <i class="bi bi-trash-fill"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>        
+                            </div>
+                            <div class="row">
+                                <xp-preference-form *ngIf="shouldRenderPreferenceForm" [shouldEdit]="shouldEdit" [preference]="selectedPreference" (preferenceUpdated)="getPreferences()"></xp-preference-form>
+                            </div>  
+                            <div class="row mt-3">
+                                <button class="btn btn-success" (click)="onAddClicked()">Add <i class="bi bi-plus"></i></button>
+                            </div>
+                            <div class="row">
+                                <xp-preference-form *ngIf="shouldRenderAdd" [shouldEdit]="shouldEdit" (preferenceUpdated)="getPreferences()"></xp-preference-form>
+                            </div>
+                        </div>   
+                      </div>
+                    </div>
+                </div> -->
                 <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
