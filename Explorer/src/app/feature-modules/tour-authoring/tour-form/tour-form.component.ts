@@ -68,6 +68,9 @@ export class TourFormComponent implements OnInit {
   ngOnInit(): void {
     if(this.shouldEdit){
       this.initializeTourFields();
+    } else{
+      this.tour.KeyPoints = []
+      this.tour.RequiredTimes = []
     }
     this.initializeMap();
     this.authService.user$.subscribe(user => {
@@ -185,7 +188,7 @@ export class TourFormComponent implements OnInit {
     this.pointForAdd.Latitude = this.currentMarker.getLatLng().lat;
     this.pointForAdd.Longitude = this.currentMarker.getLatLng().lng;
     this.pointForAdd.tourId = this.tour.id;
-    if(this.tour.KeyPoints == null){
+    if(this.tour.KeyPoints == null || this.tour.KeyPoints == undefined){
       this.tour.KeyPoints = []
     }
     if(this.tour.KeyPoints[-1] == this.pointForAdd){
@@ -212,15 +215,12 @@ export class TourFormComponent implements OnInit {
     if(this.tour.Name === "" || this.tour.Description === "") return false;
     if(this.tour.Difficult < 1) return false;
     if(this.tour.Price < 0) return false;
-    if(this.tour.RequiredTimes == undefined || this.tour.RequiredTimes.length < 1) return false;
     return true;
   }
 
   save() {
     if(!this.shouldEdit){
       this.tour.authorId = this.user.id
-      this.tour.KeyPoints = []
-      this.tour.RequiredTimes = []
       this.tour.Length = 0;
       this.tour.PublishTime = null;
       this.tour.ArchiveTime = null;
