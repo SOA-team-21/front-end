@@ -1,6 +1,6 @@
 import { Completer } from "./completer.model";
 import { Location } from "./location.model";
-import { Participant } from "./participant.model";
+import { GoParticipant, Participant } from "./participant.model";
 
 export interface Encounter {
     id: number;
@@ -13,6 +13,19 @@ export interface Encounter {
     radius: number;
     participants?: Participant[];
     completers?: Completer[];
+}
+
+export interface GoEncounter {
+    id: number;
+    Name: string;
+    Description: string;
+    Location: Location;
+    Experience: number;
+    Status: EncounterStatus,
+    Type: EncounterType,
+    Radius: number;
+    Participants?: GoParticipant[];
+    Completers?: Completer[];
 }
 
 export enum EncounterStatus {

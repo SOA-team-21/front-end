@@ -141,7 +141,7 @@
               </ul>
         </div>
         <div class="modal-footer">
-          <button *ngIf="canActivate" type="button" class="btn btn-outline-success" (click)="activateSocialEncounter()" >Activate</button>
+          <button *ngIf="canActivate" type="button" class="btn btn-outline-success" (click)="activateSocialEncounter()" data-bs-dismiss="modal">Activate</button>
           <button *ngIf="canSolve" type="button" class="btn btn-outline-success" (click)="solveSocialEncounter()">Solve</button>
         </div>
 
@@ -153,21 +153,21 @@
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{selectedHiddenEncounter.name}}</h1>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{selectedHiddenEncounter.Name}}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div>
             <p><strong>Description:</strong></p>
-            <p>{{ selectedHiddenEncounter.description }}</p>
+            <p>{{ selectedHiddenEncounter.Description }}</p>
           </div>
-            <p><strong>Experience:</strong> {{ selectedHiddenEncounter.experience }}</p>
+            <p><strong>Experience:</strong> {{ selectedHiddenEncounter.Experience }}</p>
             <div *ngIf="canSolveHiddenEncounter">
-              <img src="{{selectedHiddenEncounter.image}}" class="img-fluid" alt="" srcset="">
+              <img src="{{selectedHiddenEncounter.Image}}" class="img-fluid" alt="" srcset="">
             </div>
         </div>
         <div class="modal-footer">
-          <button *ngIf="canActivateHiddenEncounter" type="button" class="btn btn-primary" (click)="activateHiddenEncounter()">Activate</button>
+          <button *ngIf="canActivateHiddenEncounter" type="button" class="btn btn-primary" (click)="activateHiddenEncounter()" data-bs-dismiss="modal">Activate</button>
         </div>
         <div class="modal-footer">
           <button *ngIf="canSolveHiddenEncounter" type="button" class="btn btn-success" (click)="solveHiddenEncounter()">Solve</button>

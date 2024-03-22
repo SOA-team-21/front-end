@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { Encounter } from './model/encounter.model';
 import { SocialEncounter } from './model/socialEncounter.model';
-import { HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
+import { GoHiddenEncounter, HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
 import { environment } from 'src/env/environment';
 import { ParticipantLocation } from './model/participant-location.model';
 import { MiscEncounter } from './model/misc-encounter.model';
@@ -48,12 +48,12 @@ export class EncounterService {
     return this.http.get<any[]>(environment.apiHost + `hidden-encounters/getAll`);
   }
 
-  activateHiddenEncounter(encounterId: number, participantLocation: ParticipantLocation): Observable<HiddenEncounter> {
-    return this.http.put<HiddenEncounter>(environment.apiHost + 'encounters/activate/' + encounterId, participantLocation);
+  activateHiddenEncounter(encounterId: number, participantLocation: ParticipantLocation): Observable<GoHiddenEncounter> {
+    return this.http.put<GoHiddenEncounter>(environment.apiHost + 'encounters/activate/' + encounterId, participantLocation);
   }
 
-  solveHiddenEncounter(encounterId: number, participantLocation: ParticipantLocation): Observable<HiddenEncounter> {
-    return this.http.put<HiddenEncounter>(environment.apiHost + 'hidden-encounters/solve-hidden/' + encounterId, participantLocation);
+  solveHiddenEncounter(encounterId: number, participantLocation: ParticipantLocation): Observable<GoHiddenEncounter> {
+    return this.http.put<GoHiddenEncounter>(environment.apiHost + 'hidden-encounters/solve-hidden/' + encounterId, participantLocation);
   }
 
   //Misc Encounter
