@@ -6,10 +6,10 @@ import { GoToken, GoTourExecution , GoPointTask, GoPosition} from '../model/tour
 import { GoTour } from '../../tour-authoring/model/tour.model';
 import { Router } from '@angular/router';
 import { SocialEncounter } from '../../encounter/model/socialEncounter.model';
-import { HiddenEncounter } from '../../encounter/model/hidden-encounter.model';
+import { GoHiddenEncounter, HiddenEncounter } from '../../encounter/model/hidden-encounter.model';
 import { EncounterService } from '../../encounter/encounter.service';
 import { ParticipantLocation } from '../../encounter/model/participant-location.model';
-import { Encounter } from '../../encounter/model/encounter.model';
+import { Encounter, GoEncounter } from '../../encounter/model/encounter.model';
 import { MiscEncounter } from '../../encounter/model/misc-encounter.model';
 import { TourAuthoringService } from '../../tour-authoring/tour-authoring.service';
 
@@ -41,22 +41,22 @@ export class PositionSimulatorComponent implements OnInit {
   socialEncounters: any[] = []
   miscEncounters: any[] = []
 
-  selectedHiddenEncounter: HiddenEncounter = {
+  selectedHiddenEncounter: GoHiddenEncounter = {
     "id": 0,
-    "name": "",
-    "description": "Encounter Description",
-    "location": {
+    "Name": "",
+    "Description": "Encounter Description",
+    "Location": {
       "latitude": 45.248376910202616,
       "longitude": 19.836076282798334,
     },
-    "experience": 50,
-    "status": 2,
-    "type": 1,
-    "radius": 100,
-    "participants": [],
-    "completers": [],
-    "image": "",
-    "pointLocation": {
+    "Experience": 50,
+    "Status": 2,
+    "Type": 1,
+    "Radius": 100,
+    "Participants": [],
+    "Completers": [],
+    "Image": "",
+    "Position": {
       "latitude": 0,
       "longitude": 0
     }
@@ -70,20 +70,20 @@ export class PositionSimulatorComponent implements OnInit {
   canActivateHiddenEncounter: boolean = true
   canSolveHiddenEncounter: boolean = false
 
-  activatedHiddenEncounter: Encounter = {
+  activatedHiddenEncounter: GoEncounter = {
     "id": 0,
-    "name": "",
-    "description": "Encounter Description",
-    "location": {
+    "Name": "",
+    "Description": "Encounter Description",
+    "Location": {
       "latitude": 45.248376910202616,
       "longitude": 19.836076282798334,
     },
-    "experience": 50,
-    "status": 2,
-    "type": 1,
-    "radius": 100,
-    "participants": [],
-    "completers": []
+    "Experience": 50,
+    "Status": 2,
+    "Type": 1,
+    "Radius": 100,
+    "Participants": [],
+    "Completers": []
   }
 
   lastTaskPoint: Point = {
@@ -250,9 +250,9 @@ export class PositionSimulatorComponent implements OnInit {
     }
   }
 
-  handleBlackMarkerClick(hiddenEncounter: HiddenEncounter) {
+  handleBlackMarkerClick(hiddenEncounter: GoHiddenEncounter) {
     this.selectedHiddenEncounter = hiddenEncounter;
-    if (this.selectedHiddenEncounter.type == 2) {
+    if (this.selectedHiddenEncounter.Type == 2) {
       this.clickedBlackMarker = true;
       this.clickedMarker = false;
       this.clickedYellowMarker = false;
@@ -298,6 +298,9 @@ export class PositionSimulatorComponent implements OnInit {
   }
   hiddenEncounterButton() {
     this.clickedBlackMarker = false;
+    if(this.selectedHiddenEncounter.Participants?.some(participant => participant.Username === this.service.user.value.username)){
+      this.canActivateHiddenEncounter = false;
+    }
   }
   miscEncounterButton() {
     if(this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)){
@@ -377,14 +380,16 @@ export class PositionSimulatorComponent implements OnInit {
         "latitude": this.updatedExecution.Position.Latitude,
         "longitude": this.updatedExecution.Position.Longitude,
       }
-
+      console.log('ucesnici izabranog:', this.selectedHiddenEncounter)
       this.encounterService.activateHiddenEncounter(this.selectedHiddenEncounter.id, this.partLocation).subscribe({
-        next: (result: Encounter) => {
+        next: (result: GoEncounter) => {
           this.activatedHiddenEncounter = result;
+          console.log(this.activatedHiddenEncounter)
+          console.log(this.activatedHiddenEncounter.Participants)
           console.log(this.service.user.value.username)
-          if (this.activatedHiddenEncounter && this.activatedHiddenEncounter.participants?.some(participant => participant.username === this.service.user.value.username)) {
-            this.canActivateHiddenEncounter = false;
-            this.canSolveHiddenEncounter = true;
+          if (this.activatedHiddenEncounter && this.activatedHiddenEncounter.Participants?.some(participant => participant.Username === this.service.user.value.username)) {
+            //this.canSolveHiddenEncounter = true;
+            //this.canActivateHiddenEncounter = false;
           }
         }
       })
@@ -401,9 +406,9 @@ export class PositionSimulatorComponent implements OnInit {
         "longitude": this.updatedExecution.Position.Longitude,
       }
       this.encounterService.solveHiddenEncounter(this.selectedHiddenEncounter.id, this.partLocation).subscribe({
-        next: (result: HiddenEncounter) => {
+        next: (result: GoHiddenEncounter) => {
           this.activatedHiddenEncounter = result;
-          if (this.activatedHiddenEncounter && this.activatedHiddenEncounter.completers?.some(completer => completer.username === this.service.user.value.username)) {
+          if (this.activatedHiddenEncounter && this.activatedHiddenEncounter.Completers?.some(completer => completer.username === this.service.user.value.username)) {
             this.canSolveHiddenEncounter = false;
             this.canActivateHiddenEncounter = true;
           }

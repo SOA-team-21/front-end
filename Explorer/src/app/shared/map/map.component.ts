@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import 'leaflet-routing-machine';
 import { environment } from 'src/env/environment';
 import { GoPoint} from 'src/app/feature-modules/tour-authoring/model/points.model';
-import { HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
+import { GoHiddenEncounter, HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
 import { SocialEncounter } from 'src/app/feature-modules/encounter/model/socialEncounter.model';
 import { MiscEncounter } from 'src/app/feature-modules/encounter/model/misc-encounter.model';
 
@@ -29,8 +29,8 @@ export class MapComponent implements AfterViewInit {
   @Output() yellowMarkerClicked: EventEmitter<MiscEncounter> = new EventEmitter<MiscEncounter>();
   @Input() miscEncounters: MiscEncounter[] = [];
 
-  @Output() blackMarkerClicked: EventEmitter<HiddenEncounter> = new EventEmitter<HiddenEncounter>();
-  @Input() hiddenEncounters: HiddenEncounter[] = [];
+  @Output() blackMarkerClicked: EventEmitter<GoHiddenEncounter> = new EventEmitter<GoHiddenEncounter>();
+  @Input() hiddenEncounters: GoHiddenEncounter[] = [];
 
   private markers : L.Marker[] = [];
 
@@ -72,7 +72,7 @@ export class MapComponent implements AfterViewInit {
     this.markerClicked.emit(encounter); 
   }
 
-  handleBlackMarkerClick(hiddenEncounter: HiddenEncounter) {
+  handleBlackMarkerClick(hiddenEncounter: GoHiddenEncounter) {
     this.blackMarkerClicked.emit(hiddenEncounter);
   }
 
@@ -93,7 +93,7 @@ export class MapComponent implements AfterViewInit {
           iconAnchor: [13, 41],
         });
 
-        const marker = new L.Marker([hiddenEncounter.location.latitude, hiddenEncounter.location.longitude], { icon: blackIcon }).addTo(this.map);
+        const marker = new L.Marker([hiddenEncounter.Location.latitude, hiddenEncounter.Location.longitude], { icon: blackIcon }).addTo(this.map);
 
         marker.on('click', () => {
           this.handleBlackMarkerClick(hiddenEncounter);
