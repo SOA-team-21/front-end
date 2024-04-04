@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
 import { Encounter } from './model/encounter.model';
-import { SocialEncounter } from './model/socialEncounter.model';
+import { GoSocialEncounter, SocialEncounter } from './model/socialEncounter.model';
 import { GoHiddenEncounter, HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
 import { environment } from 'src/env/environment';
 import { ParticipantLocation } from './model/participant-location.model';
@@ -26,16 +26,16 @@ export class EncounterService {
     return this.http.post<SocialEncounter>(environment.apiHost + `social-encounters`, encounter);
   }
 
-  activateSocialEncounter(encounterId: number, location: ParticipantLocation): Observable<Encounter>{
-      return this.http.put<Encounter>(environment.apiHost + 'social-encounters/activate-social/' + encounterId, location)
+  activateSocialEncounter(encounterId: number, location: ParticipantLocation): Observable<GoSocialEncounter>{
+      return this.http.put<GoSocialEncounter>(environment.apiHost + 'social-encounters/activate-social/' + encounterId, location)
   }
 
-  solveSocialEncounter(encounterId: number, location: ParticipantLocation): Observable<SocialEncounter>{
-    return this.http.put<SocialEncounter>(environment.apiHost + 'social-encounters/solve-social/' + encounterId, location)
+  solveSocialEncounter(encounterId: number, location: ParticipantLocation): Observable<GoSocialEncounter>{
+    return this.http.put<GoSocialEncounter>(environment.apiHost + 'social-encounters/solve-social/' + encounterId, location)
   }
 
   getAllSocialEncounters(): Observable<any> {
-    return this.http.get<any>(environment.apiHost + 'social-encounters/getAll');
+    return this.http.get<any[]>(environment.apiHost + 'social-encounters/getAll');
   }
 
   //Hidden Encounter

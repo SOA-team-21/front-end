@@ -5,7 +5,7 @@ import { GoPoint, Point } from '../../tour-authoring/model/points.model';
 import { GoToken, GoTourExecution , GoPointTask, GoPosition} from '../model/tour-lifecycle.model';
 import { GoTour } from '../../tour-authoring/model/tour.model';
 import { Router } from '@angular/router';
-import { SocialEncounter } from '../../encounter/model/socialEncounter.model';
+import { GoSocialEncounter, SocialEncounter } from '../../encounter/model/socialEncounter.model';
 import { GoHiddenEncounter, HiddenEncounter } from '../../encounter/model/hidden-encounter.model';
 import { EncounterService } from '../../encounter/encounter.service';
 import { ParticipantLocation } from '../../encounter/model/participant-location.model';
@@ -24,9 +24,26 @@ export class PositionSimulatorComponent implements OnInit {
   tourExecution: GoTourExecution
   doneTasks: GoPointTask[]
   updatedExecution: GoTourExecution
-  tour: GoTour
+  //tour: GoTour
+
+  tour: GoTour = {
+    id: 0,
+    Name: '',
+    Description: '',
+    Difficult: 0,
+    Tags: [],
+    Status: 0,
+    Price: 0,
+    KeyPoints: [],
+    authorId: 0,
+    Length: 0,
+    PublishTime: null,
+    ArchiveTime: null,
+    RequiredTimes: [],
+    MyOwn: false 
+  };
+
   partLocation: ParticipantLocation
-  
   isShowReviewFormEnabled: boolean = false;
   isCreateBlogFormEnabled: boolean = false;
   showReviewForm() {
@@ -100,32 +117,32 @@ export class PositionSimulatorComponent implements OnInit {
   canActivate: boolean = true
   canSolve: boolean = true
 
-  activatedEncounter: Encounter 
-  solvedSocialEncounter: SocialEncounter
-  solvedSocialEncounters: SocialEncounter[] = []
-  activatedSocialEncounters: Encounter[] = []
+  activatedEncounter: GoEncounter
+  solvedSocialEncounter: GoSocialEncounter
+  solvedSocialEncounters: GoSocialEncounter[] = []
+  activatedSocialEncounters: GoEncounter[] = []
 
   activatedMisc: MiscEncounter
   solvedMisc: MiscEncounter
   solvedMiscEncounters: MiscEncounter[] = []
   activatedMiscEncounters: Encounter[] = []
 
-  encounterModal: SocialEncounter ={
+  encounterModal: GoSocialEncounter ={
     "id": 0,
-    "name": "",
-    "description": "Encounter Description",
-    "location": {
+    "Name": "",
+    "Description": "Encounter Description",
+    "Location": {
       "latitude": 45.248376910202616,
       "longitude": 19.836076282798334,
     },
-    "experience": 50,
-    "status": 2,
-    "type": 1,
-    "radius": 100,
-    "participants": [],
-    "completers": [],
-    "requiredParticipants": 0,
-    "currentlyInRange": []
+    "Experience": 50,
+    "Status": 2,
+    "Type": 1,
+    "Radius": 100,
+    "Participants": [],
+    "Completers": [],
+    "RequiredParticipants": 0,
+    "CurrentlyInRange": []
   };
 
   miscModal: MiscEncounter ={
@@ -166,6 +183,7 @@ export class PositionSimulatorComponent implements OnInit {
             console.log('Received Tour: ', response);
             this.tour = response;
             this.points = this.tour.KeyPoints;
+            console.log(this.points);
           }
         })
       },
@@ -240,10 +258,10 @@ export class PositionSimulatorComponent implements OnInit {
   }
 
   // ENCOUNTERS
-  handleMarkerClick(encounter: SocialEncounter) {
+  handleMarkerClick(encounter: GoSocialEncounter) {
     console.log('Marker clicked:', encounter);
     this.encounterModal = encounter;
-    if(this.encounterModal.type === 1){
+    if(this.encounterModal.Type === 1){
         this.clickedMarker = true;
         this.clickedBlackMarker = false;
         this.clickedYellowMarker = false;
@@ -270,22 +288,22 @@ export class PositionSimulatorComponent implements OnInit {
 
   socialEncounterButton(){
 
-    if(this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)){
+    if(this.encounterModal.Completers?.some(participant => participant.username === this.service.user.value.username)){
       this.canSolve = false
       this.canActivate = false     
     }
 
     if(this.solvedSocialEncounters.some(encounter => encounter.id === this.encounterModal.id) ||
-      !this.encounterModal.currentlyInRange.some(participant => participant.username === this.service.user.value.username) &&
-   this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)
-   || (this.encounterModal.currentlyInRange.some(participant => participant.username === this.service.user.value.username) &&
-   !this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)))
+      !this.encounterModal.CurrentlyInRange.some(participant => participant.Username === this.service.user.value.username) &&
+   this.encounterModal.Completers?.some(participant => participant.username === this.service.user.value.username)
+   || (this.encounterModal.CurrentlyInRange.some(participant => participant.Username === this.service.user.value.username) &&
+   !this.encounterModal.Completers?.some(participant => participant.username === this.service.user.value.username)))
         this.canSolve = false;
     else
         this.canSolve = true;
 
-    if(!this.encounterModal.participants?.some(participant => participant.username === this.service.user.value.username)
-    && !this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username) &&
+    if(!this.encounterModal.Participants?.some(participant => participant.Username === this.service.user.value.username)
+    && !this.encounterModal.Completers?.some(participant => participant.username === this.service.user.value.username) &&
     !this.activatedSocialEncounters.some(encounter => encounter.id === this.encounterModal.id))
         this.canActivate = true;
     else
@@ -303,7 +321,7 @@ export class PositionSimulatorComponent implements OnInit {
     }
   }
   miscEncounterButton() {
-    if(this.encounterModal.completers?.some(participant => participant.username === this.service.user.value.username)){
+    if(this.encounterModal.Completers?.some(participant => participant.username === this.service.user.value.username)){
       this.canSolve = false
       this.canActivate = false     
     }
@@ -325,18 +343,21 @@ export class PositionSimulatorComponent implements OnInit {
       this.clickedYellowMarker = false;
   }
   activateSocialEncounter(){
-    if(this.encounterModal.name != ""){
+    if(this.encounterModal.Name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
         "latitude": this.updatedExecution.Position.Latitude,
         "longitude": this.updatedExecution.Position.Longitude,
                   }
+        console.log(this.service.user.value.username)
+        console.log(this.partLocation.latitude)
+        console.log(this.partLocation.latitude)
       this.encounterService.activateSocialEncounter(this.encounterModal.id, this.partLocation).subscribe({
-        next: (result: Encounter) => {
+        next: (result: GoEncounter) => {
               this.activatedEncounter = result;
-              this.encounterModal.participants = result.participants;
+              this.encounterModal.Participants = result.Participants;
               this.activatedSocialEncounters.push(result);
-              if(this.activatedEncounter.participants?.some(participant => participant.username === this.service.user.value.username)){
+              if(this.activatedEncounter.Participants?.some(participant => participant.Username === this.service.user.value.username)){
                   this.canActivate = false;
                   this.canSolve = true;
               }
@@ -347,21 +368,21 @@ export class PositionSimulatorComponent implements OnInit {
   }
 
   solveSocialEncounter(){
-    if(this.encounterModal.name != ""){
+    if(this.encounterModal.Name != ""){
       this.partLocation =
        {"username": this.service.user.value.username,
         "latitude": this.updatedExecution.Position.Latitude,
         "longitude": this.updatedExecution.Position.Longitude,
                   }
       this.encounterService.solveSocialEncounter(this.encounterModal.id, this.partLocation).subscribe({
-        next: (result: SocialEncounter) => {
+        next: (result: GoSocialEncounter) => {
           this.solvedSocialEncounter = result;
-          this.encounterModal.participants = result.participants;
+          this.encounterModal.Participants = result.Participants;
           this.solvedSocialEncounters.push(result);
           if (
-            (!this.solvedSocialEncounter.participants || this.solvedSocialEncounter.participants.length === 0) ||
-            this.solvedSocialEncounter.currentlyInRange.some(
-              participant => participant.username === this.service.user.value.username
+            (!this.solvedSocialEncounter.Participants || this.solvedSocialEncounter.Participants.length === 0) ||
+            this.solvedSocialEncounter.CurrentlyInRange.some(
+              participant => participant.Username === this.service.user.value.username
             )
           ) {
             this.canSolve = false;
