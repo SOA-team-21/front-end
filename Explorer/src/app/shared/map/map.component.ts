@@ -5,7 +5,7 @@ import 'leaflet-routing-machine';
 import { environment } from 'src/env/environment';
 import { GoPoint} from 'src/app/feature-modules/tour-authoring/model/points.model';
 import { GoHiddenEncounter, HiddenEncounter } from 'src/app/feature-modules/encounter/model/hidden-encounter.model';
-import { SocialEncounter } from 'src/app/feature-modules/encounter/model/socialEncounter.model';
+import { GoSocialEncounter, SocialEncounter } from 'src/app/feature-modules/encounter/model/socialEncounter.model';
 import { MiscEncounter } from 'src/app/feature-modules/encounter/model/misc-encounter.model';
 
 @Component({
@@ -23,8 +23,8 @@ export class MapComponent implements AfterViewInit {
   @Output() latitude: EventEmitter<number> = new EventEmitter<number>();
   @Input() points: GoPoint[] = [];
 
-  @Output() markerClicked: EventEmitter<SocialEncounter> = new EventEmitter<SocialEncounter>();
-  @Input() socialEncounters: SocialEncounter[] = [];
+  @Output() markerClicked: EventEmitter<GoSocialEncounter> = new EventEmitter<GoSocialEncounter>();
+  @Input() socialEncounters: GoSocialEncounter[] = [];
   
   @Output() yellowMarkerClicked: EventEmitter<MiscEncounter> = new EventEmitter<MiscEncounter>();
   @Input() miscEncounters: MiscEncounter[] = [];
@@ -68,7 +68,7 @@ export class MapComponent implements AfterViewInit {
     this.registerOnClick();
   }
 
-  private handleGreenMarkerClick(encounter: SocialEncounter) {
+  private handleGreenMarkerClick(encounter: GoSocialEncounter) {
     this.markerClicked.emit(encounter); 
   }
 
@@ -116,7 +116,7 @@ export class MapComponent implements AfterViewInit {
               iconAnchor: [13, 41],
             });
 
-            const marker = new L.Marker([encounter.location.latitude, encounter.location.longitude], { icon: greenIcon }).addTo(this.map);
+            const marker = new L.Marker([encounter.Location.latitude, encounter.Location.longitude], { icon: greenIcon }).addTo(this.map);
 
             marker.on('click', () => {
               this.handleGreenMarkerClick(encounter);
@@ -146,11 +146,23 @@ export class MapComponent implements AfterViewInit {
             this.markers.push(marker);
           });
         }
-    }
+
+
+        if (changes['points']) {
+          console.log('New points:', this.points);
+    
+          this.points.forEach((point) => {
+            const redIcon = L.icon({
+              iconUrl: 'https://icons.veryicon.com/png/System/Small%20%26%20Flat/map%20marker.png',
+              iconSize: [31, 41],
+              iconAnchor: [13, 41],
+            });
       
-
-
-
+            const marker = new L.Marker([point.Latitude, point.Longitude], { icon: redIcon }).addTo(this.map);
+            this.markers.push(marker);
+          });
+        }
+    }
 
   registerOnClick(): void {
     this.map.on('click', (e: any) => {
