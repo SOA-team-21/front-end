@@ -42,7 +42,7 @@ export class BlogsPageComponent implements OnInit {
                     this.blogs = this.blogs.filter(b => b !== blog);
                   }
                 }else if (blog.userId !== this.loggedInUserId && blog.title.includes('My tour')) {
-                this.administrationService.getUserFollowers(blog.userId).subscribe((result: any) => {
+                this.administrationService.getFollowers(blog.userId).subscribe((result: any) => {
                   this.followers = result;
                   if(this.followers === null){
                     this.blogs = this.blogs.filter(b => b !== blog);

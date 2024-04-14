@@ -5,8 +5,8 @@
         <div class="row">
             <div class="col-6">
                 <div>
-                    <p><strong>Level: </strong> {{person.level}}</p>
-                    <p><strong>XP: </strong> {{person.xp}}</p>
+                    <!-- <p><strong>Level: </strong> {{person.level}}</p>
+                    <p><strong>XP: </strong> {{person.xp}}</p> -->
                 </div>
             </div>
         
@@ -62,12 +62,34 @@
                                 <button class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <div *ngFor="let follower of this.user.followers" class="card m-2">
+                                <div *ngFor="let follower of followers" class="card m-2">
                                     <div class="card-body">
-                                        <h3 class="card-title">{{follower.username}}</h3>
+                                        <h3 class="card-title">{{follower.name}} {{follower.surname}}</h3>
+                                        <p class="card-body">{{follower.email}}</p>
+                                        <p class="card-body">{{follower.quote}}</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="modal fade" id="ProfileFollowingModal" data-bs-backdrop="static" tabindex="-1"
+                    aria-labelledby="ProfileFollowingModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ProfileFollowingModalLabel">Following</h1>
+                                <button class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div *ngFor="let follower of following" class="card m-2">
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{follower.name}} {{follower.surname}}</h3>
+                                        <p class="card-body">{{follower.email}}</p>
+                                        <p class="card-body">{{follower.quote}}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

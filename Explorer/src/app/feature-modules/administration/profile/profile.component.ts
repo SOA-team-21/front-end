@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AdministrationService } from '../administration.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { Person } from '../model/userprofile.model';
+import { Follower, Person } from '../model/userprofile.model';
 import { switchMap } from 'rxjs/operators';
 import { Wallet } from '../../marketplace/model/wallet.model';
 import { Preference } from '../../marketplace/model/preference.model';
 import { MarketplaceService } from '../../marketplace/marketplace.service';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'xp-profile',
@@ -14,9 +15,16 @@ import { MarketplaceService } from '../../marketplace/marketplace.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  readonly FOLLOWERS = 'followers';
+  readonly FOLLOWING = 'following';
 
   user: User;
   person: Person;
+  followers: Follower[] = [];
+  following: Follower[] = [];
+
+  toggleFollowers: string = '';
+
   selectedProfile: Person;
   wallet: Wallet;
 
@@ -30,15 +38,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.getFollowers();
-    this.getPreferences();
-    // const isReloaded = sessionStorage.getItem('isReloaded');
-    // if (!isReloaded || this.preferences.length == 0) {
-    //   sessionStorage.setItem('isReloaded', 'true');
-    //   window.location.reload();
-    // } else {
-    //   sessionStorage.removeItem('isReloaded');
-    // }   
+    this.getPreferences();   
   }
 
   getUser(): void {
@@ -54,11 +54,45 @@ export class ProfileComponent implements OnInit {
     });
   } 
 
+
   getFollowers(): void {
-    this.service.getFollowers(this.user.id).subscribe((result: any) => {
-      this.user.followers = result;
+    this.toggleFollowers = this.FOLLOWERS;
+    if(this.followers.length > 0) return;
+    this.service.getFollowers(this.user.id).subscribe((result: Follower[]) => {
+      this.followers = result;
     });
   } 
+
+  getFollowing(): void {
+    this.toggleFollowers = this.FOLLOWING;
+    if(this.following.length > 0) return;
+    this.service.getFollowing(this.user.id).subscribe((result: Follower[]) => {
+      this.following = result;
+    });
+  } 
+
+  follow(toFollow: Follower): void{ //This is used only on people that are following you but you are not following them
+    this.service.follow(this.user.id, toFollow.userId).subscribe((result: HttpStatusCode) => {
+      console.log(result);
+      if(result == HttpStatusCode.Ok){
+        let toFollowIndex = this.followers.indexOf(toFollow)
+        if(toFollowIndex < 0) return;
+        this.followers.splice(toFollowIndex, 1);
+        this.following.push(toFollow)
+      }
+    });
+  }
+
+  unfollow(toUnfollow: Follower): void{ //This is used on people you are following already
+    this.service.unfollow(this.user.id, toUnfollow.userId).subscribe((result: HttpStatusCode) => {
+        console.log(result);
+        if(result == HttpStatusCode.Ok){
+          let toUnfollowIndex = this.following.indexOf(toUnfollow)
+          if(toUnfollowIndex < 0) return;
+          this.following.splice(toUnfollowIndex, 1);
+        }
+    })
+  }
 
   getWallet(userId: number): void{
     this.service.getUserWallet(userId).subscribe({
