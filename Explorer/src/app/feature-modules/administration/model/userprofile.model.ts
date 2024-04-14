@@ -9,3 +9,11 @@ export interface Person {
     xp: number;
     level: number;
 }
+
+export interface Follower{
+    userId: number;
+    name: string;
+    surname: string;
+    quote: string;
+    email: string;
+}

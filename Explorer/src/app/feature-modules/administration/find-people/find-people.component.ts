@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { Person } from '../model/userprofile.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { AdministrationService } from '../administration.service';
 
@@ -18,7 +17,7 @@ export class FindPeopleComponent {
 
   ngOnInit(): void {
     this.user = this.authService.user$.value;
-    this.service.getUserFollowers(this.user.id).subscribe((result: any) => {
+    this.service.getFollowers(this.user.id).subscribe((result: any) => {
       this.user.followers = result;
       console.log(result);
     });
@@ -26,7 +25,7 @@ export class FindPeopleComponent {
   }
 
   getUsers(): void {
-    this.service.getUsersToFollow().subscribe((result: any) => {
+    this.service.getRecommended(this.user.id).subscribe((result: any) => {
       this.users = result;
       console.log("Users: ", this.users);
     });
@@ -34,7 +33,7 @@ export class FindPeopleComponent {
 
   followUser(user: User): void {
     console.log(user);
-    this.service.followUser(this.user.id, user.id).subscribe((result: any) => {
+    this.service.follow(this.user.id, user.id).subscribe((result: any) => {
       console.log(result);
       user.followers?.push(this.user);
     });
@@ -42,7 +41,7 @@ export class FindPeopleComponent {
 
   unfollowUser(user: User): void {
     console.log(user);
-    this.service.unfollowUser(this.user.id, user.id).subscribe((result: any) => {
+    this.service.unfollow(this.user.id, user.id).subscribe((result: any) => {
       console.log(result);
       user.followers?.splice(user.followers.findIndex((u: User) => u.id === this.user.id), 1);
     });

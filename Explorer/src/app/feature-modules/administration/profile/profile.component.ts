@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
       switchMap((user: User) => {
         this.user = user;
         this.getWallet(user.id);
-        return this.service.getUser(this.user.id);
+        return this.service.getProfile(this.user.id);
       })
     ).subscribe((result: any) => {
       this.person = result;
@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
   } 
 
   getFollowers(): void {
-    this.service.getUserFollowers(this.user.id).subscribe((result: any) => {
+    this.service.getFollowers(this.user.id).subscribe((result: any) => {
       this.user.followers = result;
     });
   } 

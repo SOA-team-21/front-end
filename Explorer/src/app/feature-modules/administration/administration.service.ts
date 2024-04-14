@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Equipment } from './model/equipment.model';
-import { environment } from 'src/env/environment';
+import { environment, environmentDocker } from 'src/env/environment';
 import { Observable } from 'rxjs';
 import { PagedResults } from 'src/app/shared/model/paged-results.model';
-import { Person } from './model/userprofile.model';
+import { Follower, Person } from './model/userprofile.model';
 import { Problem } from '../tour-authoring/model/problem.model';
 import { AppRating } from './model/app-rating.model';
 import { TouristEquipment } from './model/tourist-equipment.model';
@@ -39,15 +39,7 @@ export class AdministrationService {
     return this.http.put<Equipment>(environment.apiHost + 'administration/equipment/' + equipment.id, equipment);
   }
 
-  //Profile, Administration
-
-  getUser(id: number): Observable<Person>{
-    return this.http.get<Person>(environment.apiHost + 'userprofile/' + id);
-  }
-
-  updateUser(profile: Person): Observable<Person> {
-    return this.http.put<Person>(environment.apiHost + 'userprofile/updateUser/' + profile.id, profile);
-  }
+  //Administration
   getProblems(): Observable<PagedResults<Problem>> {
     return this.http.get<PagedResults<Problem>>(environment.apiHost + 'administration/problems')
   }
@@ -60,25 +52,42 @@ export class AdministrationService {
     const url = `${environment.apiHost}administration/users/block-user?username=` + username;
     return this.http.post<UserInfo>(url, {});
   }
-  
-  getUserFollowers(id: number): Observable<PagedResults<User>> {
-    return this.http.get<PagedResults<User>>(environment.apiHost + 'userprofile/followers/' + id);
+
+  //Profile
+  getProfile(id: number): Observable<Person>{
+    return this.http.get<Person>(environmentDocker.apiHost + 'userprofile/' + id);
+  }
+ 
+  getFollowers(id: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(environmentDocker.apiHost + 'userprofile/followers/' + id + '/followers');
   }
 
-  getUsersToFollow(): Observable<PagedResults<User>> {
-    return this.http.get<PagedResults<User>>(environment.apiHost + 'userprofile/allUsers');
+  getRecommended(id: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(environmentDocker.apiHost + 'userprofile/followers/' + id + '/recommended');
   }
 
-  followUser(userId: number, userToFollowId: number) {
-    return this.http.patch<User>(environment.apiHost + 'userprofile/followers/' + userId + '/follow/' + userToFollowId, {});
+  getFollowing(id: number): Observable<Follower[]> {
+    return this.http.get<Follower[]>(environmentDocker.apiHost + 'userprofile/followers/' + id + '/following');
   }
 
-  unfollowUser(userId: number, userToUnfollowId: number) {
-    return this.http.patch<User>(environment.apiHost + 'userprofile/followers/' + userId + '/unfollow/' + userToUnfollowId, {});
+  isFollowing(id: number, followingUserId: number): Observable<HttpStatusCode>{
+    return this.http.get<HttpStatusCode>(environmentDocker.apiHost + 'userprofile/followers/' + id + '/' + followingUserId + '/isFollowing')
+  }
+
+  follow(userId: number, userToFollowId: number): Observable<HttpStatusCode> {
+    return this.http.post<HttpStatusCode>(environment.apiHost + 'userprofile/followers/' + userId + '/follow/' + userToFollowId, {});
+  }
+
+  unfollow(userId: number, userToUnfollowId: number): Observable<HttpStatusCode> {
+    return this.http.delete<HttpStatusCode>(environment.apiHost + 'userprofile/followers/' + userId + '/unfollow/' + userToUnfollowId);
   }
 
   canUserUseBlog(userId: number): Observable<boolean> {
     return this.http.get<boolean>(environment.apiHost + 'userprofile/canUserUseBlog/' + userId);
+  }
+
+  updateUser(profile: Person): Observable<Person> {
+    return this.http.put<Person>(environment.apiHost + 'userprofile/updateUser/' + profile.id, profile);
   }
 
   //Wallet
