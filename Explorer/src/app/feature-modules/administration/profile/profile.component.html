@@ -112,16 +112,16 @@
                     <button  class="btn btn-outline-primary mt-3 me-3" (click)="getFollowing()" >Following</button>
                 </div>
                 <div class="col">
-                    <button  class="btn btn-outline-primary mt-3 me-3" (click)="getRecommended()" >Recommended people</button>
+                    <button  class="btn btn-outline-primary mt-3 me-3" (click)="getRecommended()">Recommended people</button>
                 </div>
             </div>
-            <div class="row" *ngIf="toggleFollowers == FOLLOWERS">
-                <xp-find-people [user]="user" [people]="followers" [type]="FOLLOWERS"></xp-find-people>
+            <div class="row" *ngIf="toggleFollowers === FOLLOWERS">
+                <xp-find-people [user]="user" [people]="followers" [type]="FOLLOWERS" (followersUpdated)="updateFollowers()"></xp-find-people>
             </div>
-            <div class="row" *ngIf="toggleFollowers == FOLLOWING">
-                <xp-find-people [user]="user" [people]="following" [type]="FOLLOWING"></xp-find-people>
+            <div class="row" *ngIf="toggleFollowers === FOLLOWING">
+                <xp-find-people [user]="user" [people]="following" [type]="FOLLOWING" (followingUpdated)="updateFollowing()" ></xp-find-people>
             </div>
-            <div class="row" *ngIf="toggleFollowers == RECOMMENDED">
+            <div class="row" *ngIf="toggleFollowers === RECOMMENDED">
                 <xp-find-people [user]="user" [people]="recommended" [type]="RECOMMENDED"></xp-find-people>
             </div>
         </div>

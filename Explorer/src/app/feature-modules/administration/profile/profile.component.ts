@@ -18,6 +18,10 @@ export class ProfileComponent implements OnInit {
   readonly FOLLOWING = 'following';
   readonly RECOMMENDED  = 'recommended';
 
+  private followersChanged: boolean = false;
+  private followingChanged: boolean = false;
+  private recommendedChanged: boolean = false;
+
   user: User;
   person: Person;
   followers: Follower[] = [];
@@ -55,28 +59,32 @@ export class ProfileComponent implements OnInit {
     });
   } 
 
-
   getFollowers(): void {
     this.toggleFollowers = this.FOLLOWERS; 
-    //if(this.followers.length > 0) return; //TODO: change this to something like followersChanged
+    if(!this.followersChanged) return;
     this.service.getFollowers(this.user.id).subscribe((result: Follower[]) => {
       this.followers = result;
+      this.followersChanged = false;
+      this.recommendedChanged = false;
     });
   } 
 
   getFollowing(): void {
     this.toggleFollowers = this.FOLLOWING;
-    //if(this.following.length > 0) return;
+    if(!this.followingChanged) return;
     this.service.getFollowing(this.user.id).subscribe((result: Follower[]) => {
       this.following = result;
+      this.followingChanged = false;
+      this.recommendedChanged = false;
     });
   }
   
   getRecommended():void {
     this.toggleFollowers = this.RECOMMENDED;
-    //if(this.recommended.length > 0) return;
+    if(!this.recommendedChanged) return;
     this.service.getRecommended(this.user.id).subscribe((result: Follower[]) => {
       this.recommended = result;
+      this.recommendedChanged = false;
     })
   }
 
@@ -130,5 +138,13 @@ export class ProfileComponent implements OnInit {
     else
       this.shouldRenderAdd = true
     this.shouldEdit = false;
+  }
+
+  updateFollowers(): void{
+    this.followersChanged = true;
+  }
+  
+  updateFollowing(): void{
+    this.followingChanged = true;
   }
 }

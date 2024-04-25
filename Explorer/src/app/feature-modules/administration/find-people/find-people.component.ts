@@ -20,7 +20,6 @@ export class FindPeopleComponent {
 
   @Output() followersUpdated = new EventEmitter<null>();
   @Output() followingUpdated = new EventEmitter<null>();
-  @Output() recommendedUpdated = new EventEmitter<null>();
 
   constructor(private service: AdministrationService) {}
 
@@ -34,6 +33,7 @@ export class FindPeopleComponent {
         let toFollowIndex = this.people.indexOf(toFollow)
         if(toFollowIndex < 0) return;
         this.people.splice(toFollowIndex, 1);
+        this.followersUpdated.emit();
       }
     });
   }
@@ -45,6 +45,7 @@ export class FindPeopleComponent {
           let toUnfollowIndex = this.people.indexOf(toUnfollow)
           if(toUnfollowIndex < 0) return;
           this.people.splice(toUnfollowIndex, 1);
+          this.followingUpdated.emit();
         }
     })
   }
