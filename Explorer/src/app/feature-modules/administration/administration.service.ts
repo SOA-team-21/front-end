@@ -75,11 +75,11 @@ export class AdministrationService {
   }
 
   follow(userId: number, userToFollowId: number): Observable<HttpStatusCode> {
-    return this.http.post<HttpStatusCode>(environment.apiHost + 'userprofile/followers/' + userId + '/follow/' + userToFollowId, {});
+    return this.http.post<HttpStatusCode>(environmentDocker.apiHost + 'userprofile/followers/' + userId + '/follow/' + userToFollowId, {});
   }
 
   unfollow(userId: number, userToUnfollowId: number): Observable<HttpStatusCode> {
-    return this.http.delete<HttpStatusCode>(environment.apiHost + 'userprofile/followers/' + userId + '/unfollow/' + userToUnfollowId);
+    return this.http.delete<HttpStatusCode>(environmentDocker.apiHost + 'userprofile/followers/' + userId + '/unfollow/' + userToUnfollowId);
   }
 
   canUserUseBlog(userId: number): Observable<boolean> {

@@ -7,5 +7,5 @@ export const environment = {
 
   export const environmentDocker = {
     production: false,
-    apiHost: 'https://localhost:8083/api/',
+    apiHost: 'http://localhost:8083/api/',
   };
