@@ -25,7 +25,6 @@ import {
   PositionSimulatorComponent
 } from "../../feature-modules/tour-execution/position-simulator/position-simulator.component";
 import { SearchResultsComponent } from 'src/app/feature-modules/marketplace/search-results/search-results.component';
-import { FindPeopleComponent } from 'src/app/feature-modules/administration/find-people/find-people.component';
 import { DetailedBlogComponent } from 'src/app/feature-modules/blog/detailed-blog/detailed-blog.component';
 import { BlogsPageComponent } from 'src/app/feature-modules/blog/blogs-page/blogs-page.component';
 import { PublicRegistrationRequestsComponent } from 'src/app/feature-modules/administration/public-registration-requests/public-registration-requests.component';
@@ -52,6 +51,7 @@ import { BlogReportsComponent } from 'src/app/feature-modules/blog/blog-reports/
 import { CalendarComponent } from 'src/app/feature-modules/administration/calendar/calendar.component'; 
 import { TourStatisticsComponent } from 'src/app/feature-modules/tour-execution/tour-statistics/tour-statistics.component'; 
 import { TourOwnViewComponent } from 'src/app/feature-modules/tour-authoring/tour-own-view/tour-own-view.component';
+
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
@@ -76,7 +76,6 @@ const routes: Routes = [
   {path: 'shopping-cart', component: ShoppingCartComponent},
   {path: 'tour-execution-lifecycle', component: PositionSimulatorComponent},
   {path: 'search-results', component: SearchResultsComponent},
-  {path: 'find-people', component: FindPeopleComponent},
   {path: 'detailed-blog/:blogId', component: DetailedBlogComponent, canActivate: [AuthGuard]},
   {path: 'all-blogs', component: BlogsPageComponent},
   {path: 'public-registration-requests', component: PublicRegistrationRequestsComponent},

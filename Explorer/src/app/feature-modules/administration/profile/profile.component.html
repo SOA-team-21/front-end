@@ -53,48 +53,6 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="ProfileFollowersModal" data-bs-backdrop="static" tabindex="-1"
-                    aria-labelledby="ProfileFollowersModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="ProfileFollowersModalLabel">Followers</h1>
-                                <button class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div *ngFor="let follower of followers" class="card m-2">
-                                    <div class="card-body">
-                                        <h3 class="card-title">{{follower.name}} {{follower.surname}}</h3>
-                                        <p class="card-body">{{follower.email}}</p>
-                                        <p class="card-body">{{follower.quote}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="ProfileFollowingModal" data-bs-backdrop="static" tabindex="-1"
-                    aria-labelledby="ProfileFollowingModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="ProfileFollowingModalLabel">Following</h1>
-                                <button class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div *ngFor="let follower of following" class="card m-2">
-                                    <div class="card-body">
-                                        <h3 class="card-title">{{follower.name}} {{follower.surname}}</h3>
-                                        <p class="card-body">{{follower.email}}</p>
-                                        <p class="card-body">{{follower.quote}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -143,6 +101,28 @@
                       </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row">
+                <div class="col">
+                    <button  class="btn btn-outline-primary mt-3 me-3" (click)="getFollowers()">Followers</button>
+                </div>
+                <div class="col">
+                    <button  class="btn btn-outline-primary mt-3 me-3" (click)="getFollowing()" >Following</button>
+                </div>
+                <div class="col">
+                    <button  class="btn btn-outline-primary mt-3 me-3" (click)="getRecommended()" >Recommended people</button>
+                </div>
+            </div>
+            <div class="row" *ngIf="toggleFollowers == FOLLOWERS">
+                <xp-find-people [user]="user" [people]="followers" [type]="FOLLOWERS"></xp-find-people>
+            </div>
+            <div class="row" *ngIf="toggleFollowers == FOLLOWING">
+                <xp-find-people [user]="user" [people]="following" [type]="FOLLOWING"></xp-find-people>
+            </div>
+            <div class="row" *ngIf="toggleFollowers == RECOMMENDED">
+                <xp-find-people [user]="user" [people]="recommended" [type]="RECOMMENDED"></xp-find-people>
             </div>
         </div>
     </div>

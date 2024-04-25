@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { AdministrationService } from '../administration.service';
+import { Follower } from '../model/userprofile.model';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'xp-find-people',
@@ -9,48 +10,43 @@ import { AdministrationService } from '../administration.service';
   styleUrls: ['./find-people.component.css']
 })
 export class FindPeopleComponent {
+  readonly FOLLOWERS = 'followers';
+  readonly FOLLOWING = 'following';
+  readonly RECOMMENDED  = 'recommended';
 
-  user: User;
-  users: User[];
+  @Input({required: true}) user: User;
+  @Input({required: true}) people: Follower[] = [];
+  @Input() type: string = '';
 
-  constructor(private authService: AuthService, private service: AdministrationService) {}
+  @Output() followersUpdated = new EventEmitter<null>();
+  @Output() followingUpdated = new EventEmitter<null>();
+  @Output() recommendedUpdated = new EventEmitter<null>();
+
+  constructor(private service: AdministrationService) {}
 
   ngOnInit(): void {
-    this.user = this.authService.user$.value;
-    this.service.getFollowers(this.user.id).subscribe((result: any) => {
-      this.user.followers = result;
+  }
+
+  follow(toFollow: Follower): void{ //This is used only on people that are following you but you are not following them
+    this.service.follow(this.user.id, toFollow.userId).subscribe((result: HttpStatusCode) => {
       console.log(result);
-    });
-    this.getUsers();
-  }
-
-  getUsers(): void {
-    this.service.getRecommended(this.user.id).subscribe((result: any) => {
-      this.users = result;
-      console.log("Users: ", this.users);
+      if(result == HttpStatusCode.Ok){
+        let toFollowIndex = this.people.indexOf(toFollow)
+        if(toFollowIndex < 0) return;
+        this.people.splice(toFollowIndex, 1);
+        this.people.push(toFollow)
+      }
     });
   }
 
-  followUser(user: User): void {
-    console.log(user);
-    this.service.follow(this.user.id, user.id).subscribe((result: any) => {
-      console.log(result);
-      user.followers?.push(this.user);
-    });
+  unfollow(toUnfollow: Follower): void{ //This is used on people you are following already
+    this.service.unfollow(this.user.id, toUnfollow.userId).subscribe((result: HttpStatusCode) => {
+        console.log(result);
+        if(result == HttpStatusCode.Ok){
+          let toUnfollowIndex = this.people.indexOf(toUnfollow)
+          if(toUnfollowIndex < 0) return;
+          this.people.splice(toUnfollowIndex, 1);
+        }
+    })
   }
-
-  unfollowUser(user: User): void {
-    console.log(user);
-    this.service.unfollow(this.user.id, user.id).subscribe((result: any) => {
-      console.log(result);
-      user.followers?.splice(user.followers.findIndex((u: User) => u.id === this.user.id), 1);
-    });
-  }
-
-  isUserFollowed(current: User): boolean {
-    console.log("Current: " + current.username);
-    console.log("Followers: ", current.followers);
-    return !!current.followers?.some((u: User) => u.username === this.user.username);
-  }
-
 }

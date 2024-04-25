@@ -7,7 +7,6 @@ import { switchMap } from 'rxjs/operators';
 import { Wallet } from '../../marketplace/model/wallet.model';
 import { Preference } from '../../marketplace/model/preference.model';
 import { MarketplaceService } from '../../marketplace/marketplace.service';
-import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'xp-profile',
@@ -17,11 +16,13 @@ import { HttpStatusCode } from '@angular/common/http';
 export class ProfileComponent implements OnInit {
   readonly FOLLOWERS = 'followers';
   readonly FOLLOWING = 'following';
+  readonly RECOMMENDED  = 'recommended';
 
   user: User;
   person: Person;
   followers: Follower[] = [];
   following: Follower[] = [];
+  recommended: Follower[] = [];
 
   toggleFollowers: string = '';
 
@@ -56,8 +57,8 @@ export class ProfileComponent implements OnInit {
 
 
   getFollowers(): void {
-    this.toggleFollowers = this.FOLLOWERS;
-    if(this.followers.length > 0) return;
+    this.toggleFollowers = this.FOLLOWERS; 
+    //if(this.followers.length > 0) return; //TODO: change this to something like followersChanged
     this.service.getFollowers(this.user.id).subscribe((result: Follower[]) => {
       this.followers = result;
     });
@@ -65,32 +66,17 @@ export class ProfileComponent implements OnInit {
 
   getFollowing(): void {
     this.toggleFollowers = this.FOLLOWING;
-    if(this.following.length > 0) return;
+    //if(this.following.length > 0) return;
     this.service.getFollowing(this.user.id).subscribe((result: Follower[]) => {
       this.following = result;
     });
-  } 
-
-  follow(toFollow: Follower): void{ //This is used only on people that are following you but you are not following them
-    this.service.follow(this.user.id, toFollow.userId).subscribe((result: HttpStatusCode) => {
-      console.log(result);
-      if(result == HttpStatusCode.Ok){
-        let toFollowIndex = this.followers.indexOf(toFollow)
-        if(toFollowIndex < 0) return;
-        this.followers.splice(toFollowIndex, 1);
-        this.following.push(toFollow)
-      }
-    });
   }
-
-  unfollow(toUnfollow: Follower): void{ //This is used on people you are following already
-    this.service.unfollow(this.user.id, toUnfollow.userId).subscribe((result: HttpStatusCode) => {
-        console.log(result);
-        if(result == HttpStatusCode.Ok){
-          let toUnfollowIndex = this.following.indexOf(toUnfollow)
-          if(toUnfollowIndex < 0) return;
-          this.following.splice(toUnfollowIndex, 1);
-        }
+  
+  getRecommended():void {
+    this.toggleFollowers = this.RECOMMENDED;
+    //if(this.recommended.length > 0) return;
+    this.service.getRecommended(this.user.id).subscribe((result: Follower[]) => {
+      this.recommended = result;
     })
   }
 
@@ -145,5 +131,4 @@ export class ProfileComponent implements OnInit {
       this.shouldRenderAdd = true
     this.shouldEdit = false;
   }
-
 }
