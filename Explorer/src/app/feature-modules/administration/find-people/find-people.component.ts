@@ -34,7 +34,6 @@ export class FindPeopleComponent {
         let toFollowIndex = this.people.indexOf(toFollow)
         if(toFollowIndex < 0) return;
         this.people.splice(toFollowIndex, 1);
-        this.people.push(toFollow)
       }
     });
   }
