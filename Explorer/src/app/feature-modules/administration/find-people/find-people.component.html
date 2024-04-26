@@ -1,21 +1,19 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="col-12">
-            <h1>Find people to follow</h1>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6" *ngFor="let user of users">
+        <div class="col-md-6" *ngFor="let person of people">
             <div class="card mb-4">
                 <div class="card-body d-flex align-items-center justify-content-between">
-                    <h3 class="card-title mb-0">{{ user.username }}</h3>
+                    <div class="card-body">
+                        <h3 class="card-title">{{person.Name}} {{person.Surname}}</h3>
+                        <p class="card-body">{{person.Email}}</p>
+                        <p class="card-body">{{person.Quote}}</p>
+                    </div>
                     <button class="btn btn-outline-primary" 
-                            (click)="followUser(user)"
-                            *ngIf="!isUserFollowed(user)">Follow</button>
-                    <button class="btn btn-outline-danger"
-                            (click)="unfollowUser(user)" 
-                            *ngIf="isUserFollowed(user)">Unfollow</button>
+                            (click)="follow(person)"
+                            *ngIf="type === RECOMMENDED">Follow</button>
+                    <button class="btn btn-outline-primary"
+                            (click)="unfollow(person)" 
+                            *ngIf="type === FOLLOWING">Unfollow</button>
                 </div>
             </div>
         </div>

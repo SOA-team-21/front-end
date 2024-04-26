@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdministrationService } from '../administration.service';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
-import { Person } from '../model/userprofile.model';
+import { Follower, Person } from '../model/userprofile.model';
 import { switchMap } from 'rxjs/operators';
 import { Wallet } from '../../marketplace/model/wallet.model';
 import { Preference } from '../../marketplace/model/preference.model';
@@ -14,9 +14,18 @@ import { MarketplaceService } from '../../marketplace/marketplace.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  readonly FOLLOWERS = 'followers';
+  readonly FOLLOWING = 'following';
+  readonly RECOMMENDED  = 'recommended';
 
   user: User;
   person: Person;
+  followers: Follower[] = [];
+  following: Follower[] = [];
+  recommended: Follower[] = [];
+
+  toggleFollowers: string = '';
+
   selectedProfile: Person;
   wallet: Wallet;
 
@@ -30,15 +39,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.getFollowers();
-    this.getPreferences();
-    // const isReloaded = sessionStorage.getItem('isReloaded');
-    // if (!isReloaded || this.preferences.length == 0) {
-    //   sessionStorage.setItem('isReloaded', 'true');
-    //   window.location.reload();
-    // } else {
-    //   sessionStorage.removeItem('isReloaded');
-    // }   
+    this.getPreferences();   
   }
 
   getUser(): void {
@@ -46,7 +47,7 @@ export class ProfileComponent implements OnInit {
       switchMap((user: User) => {
         this.user = user;
         this.getWallet(user.id);
-        return this.service.getUser(this.user.id);
+        return this.service.getProfile(this.user.id);
       })
     ).subscribe((result: any) => {
       this.person = result;
@@ -55,10 +56,28 @@ export class ProfileComponent implements OnInit {
   } 
 
   getFollowers(): void {
-    this.service.getUserFollowers(this.user.id).subscribe((result: any) => {
-      this.user.followers = result;
+    this.toggleFollowers = this.FOLLOWERS; 
+    //if(!this.followersChanged) return;
+    this.service.getFollowers(this.user.id).subscribe((result: Follower[]) => {
+      this.followers = result;
     });
   } 
+
+  getFollowing(): void {
+    this.toggleFollowers = this.FOLLOWING;
+    //if(!this.followingChanged) return;
+    this.service.getFollowing(this.user.id).subscribe((result: Follower[]) => {
+      this.following = result;
+    });
+  }
+  
+  getRecommended():void {
+    this.toggleFollowers = this.RECOMMENDED;
+    //if(!this.recommendedChanged) return;
+    this.service.getRecommended(this.user.id).subscribe((result: Follower[]) => {
+      this.recommended = result;
+    })
+  }
 
   getWallet(userId: number): void{
     this.service.getUserWallet(userId).subscribe({
@@ -111,5 +130,4 @@ export class ProfileComponent implements OnInit {
       this.shouldRenderAdd = true
     this.shouldEdit = false;
   }
-
 }

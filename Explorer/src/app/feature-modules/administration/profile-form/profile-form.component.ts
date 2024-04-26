@@ -17,7 +17,7 @@ export class ProfileFormComponent implements OnChanges {
   constructor(private service: AdministrationService) {
   }
   ngOnChanges(): void {
-    this.profileForm.patchValue(this.profile);
+    //this.profileForm.patchValue(this.profile);
   }
 
   profileForm = new FormGroup({
@@ -32,13 +32,13 @@ export class ProfileFormComponent implements OnChanges {
     const person: Person = {
       id: this.profile.id || -1,
       userId: this.profile.userId || -1,
-      picture: this.profile.picture,
-      name: this.profileForm.value.name || "",
-      surname: this.profileForm.value.surname || "",
-      bio: this.profileForm.value.bio || "",
-      quote: this.profileForm.value.quote || "",
-      xp: this.profile.xp,
-      level: this.profile.level
+      Picture: this.profile.Picture,
+      Name: this.profileForm.value.name || "",
+      Surname: this.profileForm.value.surname || "",
+      Bio: this.profileForm.value.bio || "",
+      Quote: this.profileForm.value.quote || "",
+      Xp: this.profile.Xp,
+      Level: this.profile.Level
     };
     person.id = this.profile.id;
     this.service.updateUser(person).subscribe({
@@ -52,7 +52,7 @@ export class ProfileFormComponent implements OnChanges {
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
-        this.profile.picture = event.target.result;
+        this.profile.Picture = event.target.result;
       }
 
       reader.readAsDataURL(file);
@@ -69,6 +69,6 @@ export class ProfileFormComponent implements OnChanges {
   }
 
   removeImage():void{
-    this.profile.picture = " ";
+    this.profile.Picture = " ";
   }
 }

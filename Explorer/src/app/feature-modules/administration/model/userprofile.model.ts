@@ -1,11 +1,19 @@
 export interface Person {
     id?: number;
     userId: number;
-    name: string;
-    surname: string;
-    picture: string;
-    bio: string;
-    quote: string;
-    xp: number;
-    level: number;
+    Name: string;
+    Surname: string;
+    Picture: string;
+    Bio: string;
+    Quote: string;
+    Xp: number;
+    Level: number;
+}
+
+export interface Follower{
+    userId: number;
+    Name: string;
+    Surname: string;
+    Quote: string;
+    Email: string;
 }
