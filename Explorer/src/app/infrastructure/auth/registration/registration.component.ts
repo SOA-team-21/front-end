@@ -40,12 +40,12 @@ export class RegistrationComponent {
         next: (response) => {
           const shoppingCart: ShoppingCart = {
             id: 0,
-            idUser: response.id,
+            idUser: response.Id,
             items: [],
           }
           const wallet: Wallet = {
             id: 0,
-            userId: response.id,
+            userId: response.Id,
             coins: 0
           }
           this.authService.createShoppingCart(shoppingCart).subscribe({})
